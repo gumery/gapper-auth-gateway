@@ -26,14 +26,6 @@ class Group401 extends \Gini\Controller\CGI
             return $this->_showError();
         }
 
-        // 如果没有对应的gapper用户, 首先尝试获得gapper用户
-        if (!\Gini\Gapper\Client::getUserName()) {
-            $uinfo = \Gini\Gapper\Client::getUserByIdentity($config->source, $identity);
-            if ($uinfo['username']) {
-                \Gini\Gapper\Client::loginByUserName($uinfo['username']);
-            }
-        }
-
         if (\Gini\Gapper\Client::getUserName() && self::_hasGroup()) {
             \Gini\Gapper\Client::logout();
             return $this->_showError();
