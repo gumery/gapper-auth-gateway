@@ -1,0 +1,96 @@
+<div class="modal fade" data-require="gapper/auth/gateway/select-organization">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><?=H(T('绑定账号'))?></h4>
+            </div>
+            <form class="modal-body form gapper-auth-form" method="POST" action="ajax/gapper/step/group401"><dl class="dl-horizontal">
+                <input type="hidden" name="step" value="<?=H($step)?>" />
+                <dt class="text-center">
+                    <div class="app-icon">
+                        <div class="text-center app-icon-image"><img src="<?=H($icon)?>" /></div>
+                        <div class="text-center app-icon-title"><?=H($type)?></div>
+                    </div>
+                </dt>
+                <dd style="padding-right:30px;">
+                    <h4><?=H(T('请您补全相关信息:'))?></h4>
+                    <?php if ($error['*']) {?>
+                    <div class="form-group text-danger"><?=H($error['*'])?></div>
+                    <?php } ?>
+
+                    <?php if (!\Gini\Gapper\Client::getUserName()) { ?>
+                    <div class="form-group">
+                        <div class="text-right" style="clear:right">
+                            <span class="pull-left"><?=H(T('姓名'))?></span>
+                            <?php if ($error['name']) { ?>
+                            <span class="text-danger"><small><?=H($error['name'])?></small></span>
+                            <?php }?>
+                        </div>
+                        <div class="<?=$error['name'] ? ' has-error' : ''?>">
+                            <input class="form-control" type="text" name="name" value="<?=H($form['name'])?>" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="text-right" style="clear:right">
+                            <span class="pull-left"><?=H(T('Email'))?></span>
+                            <?php if ($error['email']) { ?>
+                            <span class="text-danger"><small><?=H($error['email'])?></small></span>
+                            <?php }?>
+                        </div>
+                        <div class="<?=$error['email'] ? ' has-error' : ''?>">
+                            <input class="form-control" type="text" name="email" value="<?=H($form['email'])?>" />
+                        </div>
+                        <div class="text-right text-muted"><small><?=H(T('请使用正确的Email, 该Email一经注册不允许更改!'))?></small></div>
+                    </div>
+                    <?php }?>
+
+                    <div class="form-group">
+                        <div class="text-right" style="clear:right">
+                            <span class="pull-left"><?=H(T('院系'))?></span>
+                            <?php if ($error['school']) { ?>
+                            <span class="text-danger"><small><?=H($error['school'])?></small></span>
+                            <?php }?>
+                        </div>
+                        <div class="<?=$error['school'] ? ' has-error' : ''?>">
+                            <select name="school" data-value="<?=H($form['school'])?>" class="form-control">
+                                <option value=''>--</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="text-right" style="clear:right">
+                            <span class="pull-left"><?=H(T('专业'))?></span>
+                            <?php if ($error['department']) { ?>
+                            <span class="text-danger"><small><?=H($error['department'])?></small></span>
+                            <?php }?>
+                        </div>
+                        <div class="<?=$error['department'] ? ' has-error' : ''?>">
+                            <select name="department" data-value="<?=H($form['department'])?>" class="form-control">
+                                <option value=''>--</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="text-right" style="clear:right">
+                            <span class="pull-left"><?=H(T('组名'))?></span>
+                            <?php if ($error['title']) { ?>
+                            <span class="text-danger"><small><?=H($error['title'])?></small></span>
+                            <?php }?>
+                        </div>
+                        <div class="<?=$error['title'] ? ' has-error' : ''?>">
+                            <input class="form-control" type="text" name="title" value="<?=H($form['title'])?>" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <input class="form-control btn btn-primary" type="submit" value="<?=H(T('提交'))?>"/>
+                    </div>
+                </dd>
+            </dl></form>
+        </div>
+    </div>
+</div>
+
