@@ -160,7 +160,7 @@ class Group401 extends \Gini\Controller\CGI
                 // 3. 自动安装组相关应用
                 $appIds = (array) \Gini\Config::get('app.auto_install_apps_for_new_group');
                 foreach ($appIds as $appId) {
-                    $gapperRPC->gapper->app->installTo($clientId, 'group', (int) $gid);
+                    $gapperRPC->gapper->app->installTo($appId, 'group', (int) $gid);
                 }
 
                 \Gini\Gapper\Client::chooseGroup((int)$gid, true);
