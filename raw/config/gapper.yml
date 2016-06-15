@@ -1,4 +1,4 @@
 auth:
   gateway:
     icon: ${GATEWAY_ICON}
-    title: ${GATEWAY_TITLE}
+    name: ${GATEWAY_NAME}
