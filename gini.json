@@ -5,6 +5,6 @@
     "version": "0.1.2",
     "dependencies": {
         "gini": ">=0.6.0",
-        "auth": "^0.1.2"
+        "auth": ">=0.1.2"
     }
 }
