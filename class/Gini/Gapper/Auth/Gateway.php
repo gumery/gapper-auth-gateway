@@ -38,17 +38,6 @@ class Gateway
         return self::getRPC();
     }
 
-    public static function getSchools()
-    {
-        $cacheKey = "gateway/organization/schools";
-        $data = self::cache($cacheKey);
-        if (empty($data)) {
-            $data = (array)self::getGatewayRPC()->Gateway->Organization->getSchools();
-            self::cache($cacheKey, $data);
-        }
-        return $data;
-    }
-
     public static function getCampuses()
     {
         $cacheKey = "gateway/location/campuses";
