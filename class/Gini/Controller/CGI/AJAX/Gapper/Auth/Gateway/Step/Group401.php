@@ -44,15 +44,23 @@ class Group401 extends \Gini\Controller\CGI
             return \Gini\IoC::construct('\Gini\CGI\Response\JSON', $config->tips['not_staff']);
         }
 
+        $userNameChangable = $config->user_name_changable;
+
         $step = 'active';
         if ($form['step'] == $step) {
             $gapperRPC = \Gini\Gapper\Client::getRPC();
             $gatewayRPC = self::_getGatewayRPC();
 
-            $title = trim($form['title']);
+            if ($userNameChangable) {
+                $name = trim($form['name']);
+                $title = trim($form['title']);
+            } else {
+                $name = $userInfo->name;
+                $title = T('%name课题组', ['%name'=>$name]); 
+            }
+
             $school = trim($form['school']);
             $department = trim($form['department']);
-            $name = trim($form['name']);
             $email = trim($form['email']);
 
             $school_code = '';
@@ -79,8 +87,11 @@ class Group401 extends \Gini\Controller\CGI
                         }, T('Email已被占用, 请换一个'));
                 }
 
+                if ($userNameChangable) {
+                    $validator->validate('title', $title, T('请填写课题组名称'));
+                }
+
                 $validator
-                    ->validate('title', $title, T('请填写课题组名称'))
                     ->validate('school', function() use ($school, $gatewayRPC, &$school_code, &$school_name) {
                         if (!$school) return true;
                         $data = (array)$gatewayRPC->Gateway->Organization->getSchools();
@@ -150,6 +161,12 @@ class Group401 extends \Gini\Controller\CGI
 
                 self::_setTagData($gid, [
                     'organization'=> [
+                        'code'=> $department_code,
+                        'name'=> $department_name,
+                        'parent'=> [
+                            'code'=> $school_code,
+                            'name'=> $school_name
+                        ],
                         'school_code' => $school_code,
                         'school_name' => $school_name,
                         'department_code' => $department_code, 
@@ -173,8 +190,8 @@ class Group401 extends \Gini\Controller\CGI
 
         } else {
             $form['name'] = $userInfo->name;
-            $form['email'] = $userInfo->email;
             $form['title'] = T('%name课题组', ['%name'=>$userInfo->name]); 
+            $form['email'] = $userInfo->email;
             $form['school'] = $userInfo->school['code'];
             $form['department'] = $userInfo->department['code'];
         }
@@ -185,6 +202,7 @@ class Group401 extends \Gini\Controller\CGI
             'form'=> $form,
             'step'=> $step,
             'error' => $error,
+            'userNameChangable' => $userNameChangable,
         ];
 
         return \Gini\IoC::construct('\Gini\CGI\Response\JSON', [

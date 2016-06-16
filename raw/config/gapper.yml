@@ -3,6 +3,7 @@ auth:
     source: ${GATEWAY_IDENTITY_SOURCE}
     icon: ${GATEWAY_ICON}
     name: ${GATEWAY_NAME}
+    user_name_changable: ${GATEWAY_USER_NAME_CHANGABLE}
     tips:
-      nobody: "您没有通过自动审核验证, 可能系统中尚未查询到您的信息, 详情请与系统管理员联系."
-      not_staff: "您不是课题组负责人, 请联系您的课题组负责人注册."
+      nobody: ${GATEWAY_TIP_NOBODY}
+      not_staff: ${GATEWAY_TIP_NOT_STAFF}
