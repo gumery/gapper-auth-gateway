@@ -44,7 +44,7 @@ class Group401 extends \Gini\Controller\CGI
             return \Gini\IoC::construct('\Gini\CGI\Response\JSON', $config->tips['nobody']);
         }
         
-        if (!in_array($userInfo->type, ['staff', 'pi'])) {
+        if (!in_array($userInfo->type, ['staff', 'pi', 'admin'])) {
             unset($_SESSION['gapper-auth-gateway.username']);
             \Gini\Gapper\Client::logout();
             return \Gini\IoC::construct('\Gini\CGI\Response\JSON', $config->tips['not_staff']);
