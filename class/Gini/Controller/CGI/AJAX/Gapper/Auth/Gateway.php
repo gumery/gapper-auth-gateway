@@ -52,6 +52,9 @@ class Gateway extends \Gini\Controller\CGI
             return $this->showJSON('卡号密码不匹配');
         }
 
+        // 记录当前登录的一卡通号
+        $_SESSION['gapper-auth-gateway.username'] = $username;
+
         $config = $this->_config();
         // 以一卡通号获取gapper用户信息
         try {
@@ -63,8 +66,6 @@ class Gateway extends \Gini\Controller\CGI
 
         // 一卡通号没有对应的gapper用户，需要激活，进入group401进行用户和组的激活
         if (empty($info)) {
-            // 记录当前登录的一卡通号
-            $_SESSION['gapper-auth-gateway.username'] = $username;
             return \Gini\CGI::request('ajax/gapper/step/group401', $this->env)->execute();
         }
 
