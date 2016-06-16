@@ -16,7 +16,7 @@ class Group401 extends \Gini\Controller\CGI
         $config = $this->_config();
 
         $identity = $_SESSION['gapper-auth-gateway.username'];
-        if (!$identity) {
+        if (!$identity && !\Gini\Gapper\Client::getUserName()) {
             return $this->_showError();
         }
 
@@ -31,8 +31,14 @@ class Group401 extends \Gini\Controller\CGI
             return $this->_showError();
         }
 
-        $userInfo = $this->_getUserInfo($identity);
-        if (empty($userInfo)) {
+        if ($identity) {
+            $userInfo = $this->_getUserInfo($identity);
+        } else {
+            $userInfo = $this->_getUserInfoByGapperUser(\Gini\Gapper\Client::getUserName());
+            $identity = $userInfo->ref_no;
+        }
+
+        if (!$userInfo->ref_no) {
             unset($_SESSION['gapper-auth-gateway.username']);
             \Gini\Gapper\Client::logout();
             return \Gini\IoC::construct('\Gini\CGI\Response\JSON', $config->tips['nobody']);
@@ -277,27 +283,21 @@ class Group401 extends \Gini\Controller\CGI
         return true;
     }
 
-    private function _getUserInfo($identity)
-    {
+    private function _getUserInfoByGapperUser($username) {
         try {
-            $config = (array) \Gini\Config::get('app.rpc');
-            $config = $config['gateway'];
-            $api = $config['url'];
-            $client_id = $config['client_id'];
-            $client_secret = $config['client_secret'];
-            $rpc = \Gini\IoC::construct('\Gini\RPC', $api);
-            if ($rpc->Gateway->authorize($client_id, $client_secret)) {
-                $info = (array) $rpc->Gateway->People->getUser($identity);
-            }
+            $rpc = \Gini\Gapper\Auth\Gateway::getRPC();
+            $info = (array) $rpc->Gateway->People->getUser(['username' => $username]);
         } catch (\Exception $e) {
         }
 
-        if (empty($info)) {
-            return;
-        }
-
-        return (object) $info;
+        return (object)$info;
     }
+
+    private function _getUserInfo($identity)
+    {
+        return (object) \Gini\Gapper\Auth\Gateway::getUserInfo($identity);
+    }
+
 }
 
 
