@@ -26,12 +26,12 @@ class Group401 extends \Gini\Controller\CGI
             return $this->_showError();
         }
 
-        if (\Gini\Gapper\Client::getUserName() && self::_hasGroup()) {
+        if (\Gini\Gapper\Client::getUserName() && $this->_hasGroup()) {
             \Gini\Gapper\Client::logout();
             return $this->_showError();
         }
 
-        $userInfo = self::_getUserInfo($identity);
+        $userInfo = $this->_getUserInfo($identity);
         if (empty($userInfo)) {
             unset($_SESSION['gapper-auth-gateway.username']);
             \Gini\Gapper\Client::logout();
@@ -49,7 +49,7 @@ class Group401 extends \Gini\Controller\CGI
         $step = 'active';
         if ($form['step'] == $step) {
             $gapperRPC = \Gini\Gapper\Client::getRPC();
-            $gatewayRPC = self::_getGatewayRPC();
+            $gatewayRPC = $this->_getGatewayRPC();
 
             if ($userNameChangable) {
                 $name = trim($form['name']);
@@ -159,7 +159,7 @@ class Group401 extends \Gini\Controller\CGI
                 ]);
                 $validator->validate('*', !!$gid, T('创建课题组失败，请重试!'))->done();
 
-                self::_setTagData($gid, [
+                $this->_setTagData($gid, [
                     'organization'=> [
                         'code'=> $department_code,
                         'name'=> $department_name,
@@ -222,7 +222,7 @@ class Group401 extends \Gini\Controller\CGI
     }
 
     private static $_gatewayRPC;
-    private static function _getGatewayRPC()
+    private function _getGatewayRPC()
     {
         if (!self::$_gatewayRPC) {
             $conf = \Gini\Config::get('app.rpc');
@@ -237,7 +237,7 @@ class Group401 extends \Gini\Controller\CGI
         return self::$_gatewayRPC;
     }
 
-    private static function _setTagData($gid, $data)
+    private function _setTagData($gid, $data)
     {
         $conf = \Gini\Config::get('tag-db.rpc');
         $url = $conf['url'];
@@ -252,14 +252,14 @@ class Group401 extends \Gini\Controller\CGI
         return !!$rpc->tagdb->data->set($tag, $data);
     }
 
-    private static function _hasGroup()
+    private function _hasGroup()
     {
         $groups = \Gini\Gapper\Client::getGroups(\Gini\Gapper\Client::getUserName(), true);
         if (!$groups || !count($groups)) return false;
         return true;
     }
 
-    private static function _getUserInfo($identity)
+    private function _getUserInfo($identity)
     {
         try {
             $config = (array) \Gini\Config::get('app.rpc');
