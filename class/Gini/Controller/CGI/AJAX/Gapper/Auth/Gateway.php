@@ -55,7 +55,7 @@ class Gateway extends \Gini\Controller\CGI
         $config = $this->_config();
         // 以一卡通号获取gapper用户信息
         try {
-            $rpc = \Gini\Gapper\Client::::getRPC();
+            $rpc = \Gini\Gapper\Client::getRPC();
             $info = $rpc->Gapper->User->getUserByIdentity($config->source, $username);
         } catch (\Exception $e) {
             return $this->showJSON(T('Login failed! Please try again.'));
