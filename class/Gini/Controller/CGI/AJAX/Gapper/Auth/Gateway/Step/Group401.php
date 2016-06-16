@@ -251,7 +251,7 @@ class Group401 extends \Gini\Controller\CGI
             $client_secret = $config['client_secret'];
             $rpc = \Gini\IoC::construct('\Gini\RPC', $api);
             if ($rpc->Gateway->authorize($client_id, $client_secret)) {
-                $info = (array) $rpc->Gateway->People->getUserInfo($identity);
+                $info = (array) $rpc->Gateway->People->getUser($identity);
             }
         } catch (\Exception $e) {
         }
