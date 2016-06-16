@@ -28,7 +28,7 @@
                             <?php }?>
                         </div>
                         <div class="<?=$error['name'] ? ' has-error' : ''?>">
-                            <input class="form-control" type="text" name="name" value="<?=H($form['name'])?>" <?= $userNameChangable ? 'readonly':''?>/>
+                            <input class="form-control" type="text" name="name" value="<?=H($form['name'])?>" <?= $userNameChangable ? '':'readonly'?>/>
                         </div>
                     </div>
                     <div class="form-group">
@@ -81,7 +81,7 @@
                             <?php }?>
                         </div>
                         <div class="<?=$error['title'] ? ' has-error' : ''?>">
-                            <input class="form-control" type="text" name="title" value="<?=H($form['title'])?>" <?= $userNameChangable ? 'readonly':''?>/>
+                            <input class="form-control" type="text" name="title" value="<?=H($form['title'])?>" <?= $userNameChangable ? '':'readonly'?>/>
                         </div>
                     </div>
 
