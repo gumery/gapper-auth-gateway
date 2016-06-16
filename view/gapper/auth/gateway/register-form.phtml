@@ -75,6 +75,46 @@
 
                     <div class="form-group">
                         <div class="text-right" style="clear:right">
+                            <span class="pull-left"><?=H(T('校区'))?></span>
+                            <?php if ($error['campus']) { ?>
+                            <span class="text-danger"><small><?=H($error['campus'])?></small></span>
+                            <?php }?>
+                        </div>
+                        <div class="<?=$error['campus'] ? ' has-error' : ''?>">
+                            <select name="campus" data-value="<?=H($form['campus'])?>" class="form-control">
+                                <option value=''>--</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="text-right" style="clear:right">
+                            <span class="pull-left"><?=H(T('楼宇'))?></span>
+                            <?php if ($error['building']) { ?>
+                            <span class="text-danger"><small><?=H($error['building'])?></small></span>
+                            <?php }?>
+                        </div>
+                        <div class="<?=$error['building'] ? ' has-error' : ''?>">
+                            <select name="building" data-value="<?=H($form['building'])?>" class="form-control">
+                                <option value=''>--</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="text-right" style="clear:right">
+                            <span class="pull-left"><?=H(T('房间'))?></span>
+                            <?php if ($error['room']) { ?>
+                            <span class="text-danger"><small><?=H($error['room'])?></small></span>
+                            <?php }?>
+                        </div>
+                        <div class="<?=$error['room'] ? ' has-error' : ''?>">
+                            <input type="text" name="room" class="form-control" value="<?= H($form['room']) ?>">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="text-right" style="clear:right">
                             <span class="pull-left"><?=H(T('组名'))?></span>
                             <?php if ($error['title']) { ?>
                             <span class="text-danger"><small><?=H($error['title'])?></small></span>

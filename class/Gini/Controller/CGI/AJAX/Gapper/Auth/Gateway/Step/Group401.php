@@ -59,6 +59,10 @@ class Group401 extends \Gini\Controller\CGI
                 $title = T('%name课题组', ['%name'=>$name]); 
             }
 
+            $campus = trim($form['campus']);
+            $building = trim($form['building']);
+            $room = trim($form['room']);
+
             $school = trim($form['school']);
             $department = trim($form['department']);
             $email = trim($form['email']);
@@ -67,6 +71,8 @@ class Group401 extends \Gini\Controller\CGI
             $school_name = '';
             $department_code = '';
             $department_name = '';
+            $campus_name = '';
+            $building_name = '';
 
             $validator = new \Gini\CGI\Validator();
             try {
@@ -92,33 +98,49 @@ class Group401 extends \Gini\Controller\CGI
                 }
 
                 $validator
-                    ->validate('school', function() use ($school, $gatewayRPC, &$school_code, &$school_name) {
+                    ->validate('campus', function() use ($campus, &$campus_name) {
+                        if (!$campus) return true;
+                        $data = (array)\Gini\Gapper\Auth\Gateway::getCampuses();
+                        foreach ($data as $l) {
+                            if ($campus == $l['code']) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }, T('请选择校区'))
+                    ->validate('building', function() use ($building, $campus, &$building_name) {
+                        if (!$campus || !$building) return true;
+                        $data = (array)\Gini\Gapper\Auth\Gateway::getBuildings($campus);
+                        foreach ($data as $d) {
+                            if ($building == $d['code']) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }, T('请选择楼宇信息'))
+                    ->validate('school', function() use ($school, &$school_name) {
                         if (!$school) return true;
-                        $data = (array)$gatewayRPC->Gateway->Organization->getSchools();
+                        $data = (array) \Gini\Gapper\Auth\Gateway::getSchools();
                         if (empty($data)) return false;
                         foreach ($data as $org) {
                             if ($org['code']==$school) {
-                                $school_code = $org['code'];
                                 $school_name = $org['name'];
                                 return true;
                             }
                         }
                         return false;
                     }, T('请选择学院信息'))
-                    ->validate('department', function() use ($school, $department, $gatewayRPC, &$department_code, &$department_name) {
-                        if (!$department) return true;
-                        if ($school) {
-                            $data = (array)$gatewayRPC->Gateway->Organization->getDepartments(['school' => $school]);
-                            if (empty($data)) return false;
-                            foreach ($data as $org) {
-                                if ($org['code']==$department) {
-                                    $department_code = $org['code'];
-                                    $department_name = $org['name'];
-                                    return true;
-                                }
+                    ->validate('department', function() use ($school, $department, &$department_name) {
+                        if (!$school || !$department) return true;
+                        $data = (array)\Gini\Gapper\Auth\Gateway::getDepartments(['school' => $school]);
+                        if (empty($data)) return false;
+                        foreach ($data as $org) {
+                            if ($org['code']==$department) {
+                                $department_name = $org['name'];
+                                return true;
                             }
-                            return false;
                         }
+                        return false;
                     }, T('请选择正确的专业信息'));
 
                 $validator->done();
@@ -161,16 +183,23 @@ class Group401 extends \Gini\Controller\CGI
 
                 $this->_setTagData($gid, [
                     'organization'=> [
-                        'code'=> $department_code,
+                        'code'=> $department,
                         'name'=> $department_name,
                         'parent'=> [
-                            'code'=> $school_code,
+                            'code'=> $school,
                             'name'=> $school_name
                         ],
-                        'school_code' => $school_code,
+                        'school_code' => $school,
                         'school_name' => $school_name,
-                        'department_code' => $department_code, 
+                        'department_code' => $department, 
                         'department_name' => $department_name,
+                    ],
+                    'location'=> [
+                        'campus_code'=> $campus,
+                        'campus_name'=> $campus_name,
+                        'building_code'=> $building,
+                        'building_name'=> $building_name,
+                        'room_name'=> $room
                     ]
                 ]);
 
@@ -221,20 +250,9 @@ class Group401 extends \Gini\Controller\CGI
         ]);
     }
 
-    private static $_gatewayRPC;
     private function _getGatewayRPC()
     {
-        if (!self::$_gatewayRPC) {
-            $conf = \Gini\Config::get('app.rpc');
-            $gateway = $conf['gateway'];
-            $gatewayURL = $gateway['url'];
-            $clientId = $gateway['client_id'];
-            $clientSecret = $gateway['client_secret'];
-            $rpc = \Gini\IoC::construct('\Gini\RPC', $gatewayURL);
-            $rpc->Gateway->authorize($clientId, $clientSecret);
-            self::$_gatewayRPC = $rpc;
-        }
-        return self::$_gatewayRPC;
+        return \Gini\Gapper\Auth\Gateway::getRPC();
     }
 
     private function _setTagData($gid, $data)

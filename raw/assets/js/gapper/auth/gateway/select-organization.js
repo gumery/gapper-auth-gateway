@@ -35,13 +35,40 @@ define('gapper/auth/gateway/select-organization', ['jquery'], function($) {
         });
     };
 
+    var initBuildings = function(pid, vid) {
+        var $buildingHandler = $('select[name=building]');
+        $buildingHandler.html('<option>--</option>');
+        if (pid) $.get(['ajax/gapper/auth/gateway/location/get-buildings/', pid].join(''), function(result) {
+            doSelect($buildingHandler, result, vid);
+        });
+    };
+
+    var initCampuses = function(force) {
+        var $campusHandler = $('select[name=campus]');
+        if ($campusHandler.attr('data-inited') && ! force) return;
+        $campusHandler.attr('data-inited', true);
+        var currentCampus = $campusHandler.attr('data-value');
+        var $buildingHandler = $('select[name=building]');
+        var currentBuilding = $buildingHandler.attr('data-value');
+        $.get('ajax/gapper/auth/gateway/location/get-campuses', function(result) {
+            doSelect($campusHandler, result, currentCampus);
+            initBuildings(currentCampus, currentBuilding);
+        });
+    };
+
     $('body').on('change', 'select[name=school]', function() {
         $(this).attr('data-value', $(this).val());
         initSchools(true);
     });
 
+    $('body').on('change', 'select[name=campus]', function() {
+        $(this).attr('data-value', $(this).val());
+        initCampuses(true);
+    });
+
     var run = function() {
         initSchools();
+        initCampuses();
     };
 
     var response = {};

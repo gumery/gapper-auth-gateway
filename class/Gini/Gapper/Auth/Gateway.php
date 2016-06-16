@@ -1,0 +1,94 @@
+<?php
+
+namespace Gini\Gapper\Auth;
+
+class Gateway 
+{
+    private static $_RPC;
+    public static function getRPC()
+    {
+        if (!self::$_RPC) {
+            $conf = \Gini\Config::get('app.rpc');
+            $gateway = $conf["gateway"];
+            $gatewayURL = $gateway['url'];
+            $clientId = $gateway['client_id'];
+            $clientSecret = $gateway['client_secret'];
+
+            $cacheKey = "gateway/client.$clientId/session-token";
+            $token = self::cache($cacheKey);
+            $rpc = \Gini\IoC::construct('\Gini\RPC', $gatewayURL);
+
+            if ($token) {
+                $rpc->setHeader([ 'X-Gini-Session' => $token ]);
+            } else {
+                $token = $rpc->Gateway->authorize($clientId, $clientSecret);
+                if ($token) {
+                    self::cache($cacheKey, $token);
+                }
+            }
+
+            self::$_RPC = $rpc;
+        }
+
+        return self::$_RPC;
+    }
+
+    // alias for backwards compatibility
+    public static function getGatewayRPC() {
+        return self::getRPC();
+    }
+
+    public static function getSchools()
+    {
+        $cacheKey = "gateway/organization/schools";
+        $data = self::cache($cacheKey);
+        if (empty($data)) {
+            $data = (array)self::getGatewayRPC()->Gateway->Organization->getSchools();
+            self::cache($cacheKey, $data);
+        }
+        return $data;
+    }
+
+    public static function getCampuses()
+    {
+        $cacheKey = "gateway/location/campuses";
+        $data = self::cache($cacheKey);
+        if (empty($data)) {
+            $data = (array)self::getGatewayRPC()->Gateway->Location->getCampuses();
+            self::cache($cacheKey, $data);
+        }
+        return $data;
+    }
+
+    public static function getBuildings($campus)
+    {
+        $cacheKey = "gateway/location/campus.$campus/buildings";
+        $data = self::cache($cacheKey);
+        if (empty($data)) {
+            $data = (array)self::getGatewayRPC()->Gateway->Location->getBuildings($campus);
+            self::cache($cacheKey, $data);
+        }
+        return $data;
+    }
+
+    public static function getUserInfo($username)
+    {
+        $cacheKey = "gateway/people/user.$username/info";
+        $data = self::cache($cacheKey);
+        if (empty($data)) {
+            $data = (array)self::getGatewayRPC()->Gateway->People->getUser($username);
+            self::cache($cacheKey, $data);
+        }
+        return $data;
+    }
+
+    private static function cache($key, $value=null)
+    {
+        $node = \Gini\Config::get('app.node');
+        $cacher = \Gini\Cache::of("gapper-auth-gateway");
+        if (is_null($value)) {
+            return $cacher->get($key);
+        }
+        $cacher->set($key, $value, 60);
+    }
+}
