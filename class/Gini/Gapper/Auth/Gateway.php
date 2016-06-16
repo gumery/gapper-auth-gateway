@@ -82,6 +82,28 @@ class Gateway
         return $data;
     }
 
+    public static function getSchools()
+    {
+        $cacheKey = "gateway/organization/schools";
+        $data = self::cache($cacheKey);
+        if (empty($data)) {
+            $data = (array)self::getGatewayRPC()->Gateway->Organization->getSchools();
+            self::cache($cacheKey, $data);
+        }
+        return $data;
+    }
+
+    public static function getDepartments($school)
+    {
+        $cacheKey = "gateway/organization/school.$school/departments";
+        $data = self::cache($cacheKey);
+        if (empty($data)) {
+            $data = (array)self::getGatewayRPC()->Gateway->Organization->getDepartments($school);
+            self::cache($cacheKey, $data);
+        }
+        return $data;
+    }
+
     private static function cache($key, $value=null)
     {
         $node = \Gini\Config::get('app.node');
