@@ -2,7 +2,7 @@
     "id": "gapper-auth-gateway",
     "name": "Gateway API 登录",
     "description": "Gapper Login UI",
-    "version": "0.1.17",
+    "version": "0.1.18",
     "dependencies": {
         "gini": ">=0.6.0",
         "auth": ">=0.1.2"
