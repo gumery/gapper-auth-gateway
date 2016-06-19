@@ -22,14 +22,10 @@ class Group401 extends \Gini\Controller\CGI
 
         $appInfo = \Gini\Gapper\Client::getInfo();
         if (!$appInfo['id']) {
-            unset($_SESSION['gapper-auth-gateway.username']);
-            \Gini\Gapper\Client::logout();
             return $this->_showError();
         }
 
         if (\Gini\Gapper\Client::getUserName() && $this->_hasGroup()) {
-            unset($_SESSION['gapper-auth-gateway.username']);
-            \Gini\Gapper\Client::logout();
             return $this->_showError();
         }
 
@@ -250,6 +246,7 @@ class Group401 extends \Gini\Controller\CGI
 
     private function _showError()
     {
+        unset($_SESSION['gapper-auth-gateway.username']);
         \Gini\Gapper\Client::logout();
         $view = $view ?: (string)V(\Gini\Config::get('gapper.views')['client/error/401-group'] ?: 'gapper/client/error/401-group');
         return \Gini\IoC::construct('\Gini\CGI\Response\JSON', [
