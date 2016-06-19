@@ -38,13 +38,11 @@ class Group401 extends \Gini\Controller\CGI
 
         if (!$userInfo->ref_no) {
             unset($_SESSION['gapper-auth-gateway.username']);
-            \Gini\Gapper\Client::logout();
             return \Gini\IoC::construct('\Gini\CGI\Response\JSON', $config->tips['nobody']);
         }
-        
+
         if (!in_array($userInfo->type, ['staff', 'pi', 'admin'])) {
             unset($_SESSION['gapper-auth-gateway.username']);
-            \Gini\Gapper\Client::logout();
             return \Gini\IoC::construct('\Gini\CGI\Response\JSON', $config->tips['not_staff']);
         }
 
@@ -60,7 +58,7 @@ class Group401 extends \Gini\Controller\CGI
                 $title = trim($form['title']);
             } else {
                 $name = $userInfo->name;
-                $title = T('%name课题组', ['%name'=>$name]); 
+                $title = T('%name课题组', ['%name'=>$name]);
             }
 
             $campus = trim($form['campus']);
@@ -168,7 +166,7 @@ class Group401 extends \Gini\Controller\CGI
                 }
 
                 // 检查是否需要创建一个组
-                
+
                 // 尝试建组
                 $titlePinyin = Pinyin::trans($title, [
                     'delimiter' => '',
@@ -195,7 +193,7 @@ class Group401 extends \Gini\Controller\CGI
                         ],
                         'school_code' => $school,
                         'school_name' => $school_name,
-                        'department_code' => $department, 
+                        'department_code' => $department,
                         'department_name' => $department_name,
                     ],
                     'location'=> [
@@ -223,7 +221,7 @@ class Group401 extends \Gini\Controller\CGI
 
         } else {
             $form['name'] = $userInfo->name;
-            $form['title'] = T('%name课题组', ['%name'=>$userInfo->name]); 
+            $form['title'] = T('%name课题组', ['%name'=>$userInfo->name]);
             $form['email'] = $userInfo->email;
             $form['school'] = $userInfo->school['code'];
             $form['department'] = $userInfo->department['code'];
@@ -247,7 +245,6 @@ class Group401 extends \Gini\Controller\CGI
     private function _showError()
     {
         unset($_SESSION['gapper-auth-gateway.username']);
-        \Gini\Gapper\Client::logout();
         $view = $view ?: (string)V(\Gini\Config::get('gapper.views')['client/error/401-group'] ?: 'gapper/client/error/401-group');
         return \Gini\IoC::construct('\Gini\CGI\Response\JSON', [
             'type'=> 'modal',
