@@ -244,12 +244,9 @@ class Group401 extends \Gini\Controller\CGI
 
     private function _showError()
     {
-        unset($_SESSION['gapper-auth-gateway.username']);
-        $view = $view ?: (string)V(\Gini\Config::get('gapper.views')['client/error/401-group'] ?: 'gapper/client/error/401-group');
-        return \Gini\IoC::construct('\Gini\CGI\Response\JSON', [
-            'type'=> 'modal',
-            'message'=> $view
-        ]);
+        // unset($_SESSION['gapper-auth-gateway.username']);
+        $view = \Gini\Config::get('gapper.views')['client/error/401-group'] ?: 'gapper/client/error/401-group';
+        return \Gini\IoC::construct('\Gini\CGI\Response\JSON', V($view)]);
     }
 
     private function _getGatewayRPC()
