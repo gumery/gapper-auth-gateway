@@ -37,12 +37,12 @@ class Group401 extends \Gini\Controller\CGI
         }
 
         if (!$userInfo->ref_no) {
-            unset($_SESSION['gapper-auth-gateway.username']);
+            // unset($_SESSION['gapper-auth-gateway.username']);
             return \Gini\IoC::construct('\Gini\CGI\Response\JSON', $config->tips['nobody']);
         }
 
         if (!in_array($userInfo->type, ['staff', 'pi', 'admin'])) {
-            unset($_SESSION['gapper-auth-gateway.username']);
+            // unset($_SESSION['gapper-auth-gateway.username']);
             return \Gini\IoC::construct('\Gini\CGI\Response\JSON', $config->tips['not_staff']);
         }
 
