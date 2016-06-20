@@ -99,51 +99,65 @@ class Group401 extends \Gini\Controller\CGI
                     $validator->validate('title', $title, T('请填写课题组名称'));
                 }
 
-                $validator
-                    ->validate('campus', function() use ($campus, &$campus_name) {
-                        if (!$campus) return true;
-                        $data = (array)\Gini\Gapper\Auth\Gateway::getCampuses();
-                        foreach ($data as $l) {
-                            if ($campus == $l['code']) {
-                                return true;
-                            }
+                if ($campus) {
+                    $data = (array)\Gini\Gapper\Auth\Gateway::getCampuses();
+                    foreach ($data as $l) {
+                        if ($campus == $l['code']) {
+                            $campus_name = $l['name'];
+                            break;
                         }
-                        return false;
-                    }, T('请选择校区'))
-                    ->validate('building', function() use ($building, $campus, &$building_name) {
-                        if (!$campus || !$building) return true;
-                        $data = (array)\Gini\Gapper\Auth\Gateway::getBuildings($campus);
-                        foreach ($data as $d) {
-                            if ($building == $d['code']) {
-                                return true;
-                            }
+                    }
+                }
+
+                if ($building && $campus) {
+                    $data = (array)\Gini\Gapper\Auth\Gateway::getBuildings($campus);
+                    foreach ($data as $d) {
+                        if ($building == $d['code']) {
+                            $building_name = $l['name'];
+                            break;
                         }
-                        return false;
-                    }, T('请选择楼宇信息'))
-                    ->validate('school', function() use ($school, &$school_name) {
-                        if (!$school) return true;
-                        $data = (array) \Gini\Gapper\Auth\Gateway::getSchools();
-                        if (empty($data)) return false;
-                        foreach ($data as $org) {
-                            if ($org['code']==$school) {
-                                $school_name = $org['name'];
-                                return true;
-                            }
+                    }
+                }
+
+                if ($school) {
+                    $data = (array) \Gini\Gapper\Auth\Gateway::getSchools();
+                    foreach ($data as $org) {
+                        if ($org['code']==$school) {
+                            $school_name = $org['name'];
+                            break;
                         }
-                        return false;
-                    }, T('请选择学院信息'))
-                    ->validate('department', function() use ($school, $department, &$department_name) {
-                        if (!$school || !$department) return true;
-                        $data = (array)\Gini\Gapper\Auth\Gateway::getDepartments(['school' => $school]);
-                        if (empty($data)) return false;
-                        foreach ($data as $org) {
-                            if ($org['code']==$department) {
-                                $department_name = $org['name'];
-                                return true;
-                            }
+                    }
+                }
+
+                if ($school && $department) {
+                    $data = (array)\Gini\Gapper\Auth\Gateway::getDepartments(['school' => $school]);
+                    foreach ($data as $org) {
+                        if ($org['code']==$department) {
+                            $department_name = $org['name'];
+                            break;
                         }
-                        return false;
-                    }, T('请选择正确的专业信息'));
+                    }
+                }
+
+                if (!!$config->form_requires['campus']) {
+                    $validator->validate('campus', $campus_name, T('请选择校区'));
+                }
+                
+                if (!!$config->form_requires['building']) {
+                    $validator->validate('building', $building_name, T('请选择楼宇信息'));
+                }
+                
+                if (!!$config->form_requires['school']) {
+                    $validator->validate('school', $school_name, T('请选择学院信息'));
+                }
+                
+                if (!!$config->form_requires['department']) {
+                    $validator->validate('department', $department_name, T('请选择正确的专业信息'));
+                }
+                
+                if (!!$config->form_requires['room']) {
+                    $validator->validate('room', $room, T('请输入您的房间'));
+                }
 
                 $validator->done();
 

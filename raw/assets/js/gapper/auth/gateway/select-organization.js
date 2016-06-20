@@ -2,7 +2,7 @@ define('gapper/auth/gateway/select-organization', ['jquery'], function($) {
     var doSelect = function($container, data, value) {
         data = data || {};
         data = data.data;
-        $container.html('<option>--</option>');
+        $container.html('<option value="">--</option>');
         for (var i = 0, l = data.length; i < l; i++) {
             var $tmpEle = $('<option></option>');
             $tmpEle.attr('value', data[i].code);
@@ -16,7 +16,7 @@ define('gapper/auth/gateway/select-organization', ['jquery'], function($) {
 
     var initDeps = function(pid, vid) {
         var $depHandler = $('select[name=department]');
-        $depHandler.html('<option>--</option>');
+        $depHandler.html('<option value="">--</option>');
         if (pid) $.get(['ajax/gapper/auth/gateway/organization/get-departments/', pid].join(''), function(result) {
             doSelect($depHandler, result, vid);
         });
@@ -37,7 +37,7 @@ define('gapper/auth/gateway/select-organization', ['jquery'], function($) {
 
     var initBuildings = function(pid, vid) {
         var $buildingHandler = $('select[name=building]');
-        $buildingHandler.html('<option>--</option>');
+        $buildingHandler.html('<option value="">--</option>');
         if (pid) $.get(['ajax/gapper/auth/gateway/location/get-buildings/', pid].join(''), function(result) {
             doSelect($buildingHandler, result, vid);
         });

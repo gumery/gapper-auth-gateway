@@ -4,6 +4,12 @@ auth:
     icon: ${GATEWAY_ICON}
     name: ${GATEWAY_NAME}
     user_name_changable: ${GATEWAY_USER_NAME_CHANGABLE}
+    form_requires:
+      school: ${GATEWAY_FORM_REQUIRES_SCHOOL}
+      department: ${GATEWAY_FORM_REQUIRES_DEPARTMENT}
+      campus: ${GATEWAY_FORM_REQUIRES_CAMPUS}
+      building: ${GATEWAY_FORM_REQUIRES_BUILDING}
+      room: ${GATEWAY_FORM_REQUIRES_ROOM} 
     tips:
       nobody: ${GATEWAY_TIP_NOBODY}
       not_staff: ${GATEWAY_TIP_NOT_STAFF}
