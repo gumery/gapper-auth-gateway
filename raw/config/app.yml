@@ -1,5 +1,6 @@
-gateway:
-  url: ${GATEWAY_API}
-  client_id: ${GATEWAY_CLIENT_ID}
-  client_secret: ${GATEWAY_CLIENT_SECRET}
+rpc: 
+  gateway:
+    url: ${GATEWAY_API}
+    client_id: ${GATEWAY_CLIENT_ID}
+    client_secret: ${GATEWAY_CLIENT_SECRET}
   
