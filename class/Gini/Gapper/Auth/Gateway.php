@@ -95,7 +95,6 @@ class Gateway
 
     private static function cache($key, $value=null)
     {
-        $node = \Gini\Config::get('app.node');
         $cacher = \Gini\Cache::of("gapper-auth-gateway");
         if (is_null($value)) {
             return $cacher->get($key);
