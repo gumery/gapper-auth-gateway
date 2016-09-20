@@ -1,3 +1,5 @@
+---
+auth-default-group-401: gateway
 auth:
   gateway:
     source: ${GATEWAY_IDENTITY_SOURCE}
@@ -13,3 +15,4 @@ auth:
     tips:
       nobody: ${GATEWAY_TIP_NOBODY}
       not_staff: ${GATEWAY_TIP_NOT_STAFF}
+...
