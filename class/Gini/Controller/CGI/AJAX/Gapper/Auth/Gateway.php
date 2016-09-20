@@ -87,7 +87,7 @@ class Gateway extends \Gini\Controller\CGI
     public function actionGetForm()
     {
         $config = $this->_config();
-        if (!@$config->login['url']) {
+        if (!$config->login['url']) {
             return $this->showHTML('gapper/auth/gateway/login', [
                 'icon'=> $config->icon,
                 'type'=> $config->name
@@ -106,7 +106,7 @@ class Gateway extends \Gini\Controller\CGI
         $clientId = $confs['client_id'];
 
         // login_url: http://hxpglgw.njust.edu.cn/login
-        $redirectURL = \Gini\URI::url($config->login_url, [
+        $redirectURL = \Gini\URI::url($config->login['url'], [
             'from'=> $clientId,
             'relogin'=> 1,
             'redirect'=> $redirectURL
