@@ -1,4 +1,4 @@
-<div class="text-center" style="max-height:300px;overflow-y:scroll">
+<div class="text-center add-member-matched" style="max-height:300px;overflow-y:scroll">
 <?php foreach ($data as $vData) {
     $username = $vData['username'];
     $name = $vData['name'];
@@ -8,7 +8,7 @@
     $refNO = $vData['ref_no'];
     $school = (array)$vData['school'];
 ?>
-    <form class="text-center add-member-matched" style="display:inline-block; border-bottom: 1px solid #EAEAEA;">
+    <form class="text-center" style="display:inline-block; border-bottom: 1px solid #EAEAEA;">
         <input type="hidden" name="username" value="<?=H($username)?>" />
         <input type="hidden" name="name" value="<?=H($name)?>" />
         <input type="hidden" name="email" value="<?=H($email)?>" />
