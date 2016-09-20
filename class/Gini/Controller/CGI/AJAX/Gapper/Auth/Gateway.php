@@ -87,7 +87,7 @@ class Gateway extends \Gini\Controller\CGI
     public function actionGetForm()
     {
         $config = $this->_config();
-        if (!$config->login_url) {
+        if (!@$config->login['url']) {
             return $this->showHTML('gapper/auth/gateway/login', [
                 'icon'=> $config->icon,
                 'type'=> $config->name
@@ -114,7 +114,7 @@ class Gateway extends \Gini\Controller\CGI
 
         return \Gini\IoC::construct('\Gini\CGI\Response\JSON', [
             'redirect'=> $redirectURL,
-            'message'=> $config->login_tip ?: T('去统一身份认证登录')
+            'message'=> $config->login['tip'] ?: T('去统一身份认证登录')
         ]);
     }
 

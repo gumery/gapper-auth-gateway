@@ -5,6 +5,9 @@ auth:
     source: ${GATEWAY_IDENTITY_SOURCE}
     icon: ${GATEWAY_ICON}
     name: ${GATEWAY_NAME}
+    login:
+      url: ${GATEWAY_LOGIN_URL}
+      tip: ${GATEWAY_LOGIN_TIP}
     user_name_changable: ${GATEWAY_USER_NAME_CHANGABLE}
     form_requires:
       school: ${GATEWAY_FORM_REQUIRES_SCHOOL}
