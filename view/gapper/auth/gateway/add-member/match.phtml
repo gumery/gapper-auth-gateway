@@ -1,10 +1,12 @@
-<div class="text-center">
+<div class="text-center" style="max-height:300px;overflow-y:scroll">
 <?php foreach ($data as $vData) {
     $username = $vData['username'];
     $name = $vData['name'];
     $email = $vData['email'];
     $icon = $vData['icon'];
     $initials = $vData['initials'];
+    $refNO = $vData['ref_no'];
+    $school = (array)$vData['school'];
 ?>
     <form class="text-center add-member-matched" style="display:inline-block;">
         <input type="hidden" name="username" value="<?=H($username)?>" />
@@ -24,7 +26,9 @@
                 </div>
                 <?php } ?>
             </div>
-            <div class="add-member-icon-title"><?=H($name?:T('未知用户'))?></div>
+            <div class="add-member-icon-title"><?=H(T('姓名: :name', [':name'=>$name?:T('未知用户')]))?></div>
+            <div class="add-member-icon-title"><?=H(T('学工号: :refno', [':refno'=>$refNO?:'--']))?></div>
+            <div class="add-member-icon-title"><?=H(T('学院: :school', [':school'=>$school['name']?:'--']))?></div>
         </div>
         <div style="padding-bottom:5px;"><input type="button" class="add-member-confirm btn btn-primary" value="<?=H(T('确认添加'))?>" /></div>
     </form>

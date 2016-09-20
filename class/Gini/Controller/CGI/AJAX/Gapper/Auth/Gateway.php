@@ -165,7 +165,8 @@ class Gateway extends \Gini\Controller\CGI
                 'username'=> $keyword,
                 'name'=> $info['name'],
                 'initials'=> $info['initials'],
-                'icon'=> $info['icon']
+                'icon'=> $info['icon'],
+                'ref_no'=> $keyword,
             ]];
         } else {
             $infos = (array)\Gini\Gapper\Auth\Gateway::getUsers([
@@ -176,7 +177,9 @@ class Gateway extends \Gini\Controller\CGI
                 $data[] = [
                     'username'=> $info['ref_no'],
                     'name'=> $info['name'],
-                    'email'=> $info['email']
+                    'email'=> $info['email'],
+                    'ref_no'=> $info['ref_no'],
+                    'school'=> $info['school'],
                 ];
             }
         }
