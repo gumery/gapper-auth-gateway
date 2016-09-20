@@ -8,7 +8,7 @@
     $refNO = $vData['ref_no'];
     $school = (array)$vData['school'];
 ?>
-    <form class="text-center add-member-matched">
+    <form class="text-center add-member-matched" style="display:inline-block; border-bottom: 1px solid #EAEAEA;">
         <input type="hidden" name="username" value="<?=H($username)?>" />
         <input type="hidden" name="name" value="<?=H($name)?>" />
         <input type="hidden" name="email" value="<?=H($email)?>" />
@@ -26,8 +26,10 @@
                 </div>
                 <?php } ?>
             </div>
+        </div>
+        <div>
             <div class="add-member-icon-title" title="<?=H(T('姓名: :name', [':name'=>$name?:T('未知用户')]))?>"><?=H(T('姓名: :name', [':name'=>$name?:T('未知用户')]))?></div>
-            <div class="add-member-icon-title" title="<?=H(T('学工号: :refno', [':refno'=>$refNO?:'--']))?>"><?=H(T('学工号: :refno', [':refno'=>$refNO?:'--']))?></div>
+            <div class="add-member-icon-title" title="<?=H(T(':refno', [':refno'=>$refNO?:'--']))?>"><?=H(T(':refno', [':refno'=>$refNO?:'--']))?></div>
         </div>
         <div style="padding-bottom:5px;"><input type="button" class="add-member-confirm btn btn-primary" value="<?=H(T('确认添加'))?>" /></div>
     </form>
