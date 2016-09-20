@@ -71,6 +71,18 @@ class Gateway
         return $data;
     }
 
+    public static function getUsers(array $criteria)
+    {
+        $key = md5(J($criteria));
+        $cacheKey = "gateway/people/users.$key/info";
+        $data = self::cache($cacheKey);
+        if (empty($data)) {
+            $data = (array)self::getGatewayRPC()->Gateway->People->getUsers($criteria);
+            self::cache($cacheKey, $data);
+        }
+        return $data;
+    }
+
     public static function getSchools()
     {
         $cacheKey = "gateway/organization/schools";

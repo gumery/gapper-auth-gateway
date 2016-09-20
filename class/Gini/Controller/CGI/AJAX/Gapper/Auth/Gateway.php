@@ -161,22 +161,27 @@ class Gateway extends \Gini\Controller\CGI
             if (isset($groups[$current])) {
                 return \Gini\IoC::construct('\Gini\CGI\Response\Nothing');
             }
-            $data = [
+            $data = [[
                 'username'=> $keyword,
                 'name'=> $info['name'],
                 'initials'=> $info['initials'],
                 'icon'=> $info['icon']
-            ];
+            ]];
         } else {
-            $info = (array)\Gini\Gapper\Auth\Gateway::getUserInfo($keyword);
-            $data = [
-                'username'=> $keyword,
-                'name'=> $info['name'],
-                'email'=> $info['email']
-            ];
+            $infos = (array)\Gini\Gapper\Auth\Gateway::getUsers([
+                'keyword'=> $keyword
+            ]);
+            $data = [];
+            foreach ($infos as $info) {
+                $data[] = [
+                    'username'=> $info['ref_no'],
+                    'name'=> $info['name'],
+                    'email'=> $info['email']
+                ];
+            }
         }
 
-        return \Gini\IoC::construct('\Gini\CGI\Response\JSON', (string)V('gapper/auth/gateway/add-member/match', $data));
+        return \Gini\IoC::construct('\Gini\CGI\Response\JSON', (string)V('gapper/auth/gateway/add-member/match', ['data'=> $data]));
     }
 
     private static function _postAdd($type, $form)
