@@ -99,7 +99,8 @@ class Gateway
         $cacheKey = "gateway/organization/school.$school/departments";
         $data = self::cache($cacheKey);
         if (empty($data)) {
-            $data = (array)self::getGatewayRPC()->Gateway->Organization->getDepartments($school);
+            $criteria = ['school'=>$school];
+            $data = (array)self::getGatewayRPC()->Gateway->Organization->getDepartments($criteria);
             self::cache($cacheKey, $data);
         }
         return $data;
