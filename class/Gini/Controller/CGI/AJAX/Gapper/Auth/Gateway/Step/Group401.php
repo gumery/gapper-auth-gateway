@@ -130,7 +130,7 @@ class Group401 extends \Gini\Controller\CGI
                 }
 
                 if ($school && $department) {
-                    $data = (array)\Gini\Gapper\Auth\Gateway::getDepartments(['school' => $school]);
+                    $data = (array)\Gini\Gapper\Auth\Gateway::getDepartments($school);
                     foreach ($data as $org) {
                         if ($org['code']==$department) {
                             $department_name = $org['name'];
