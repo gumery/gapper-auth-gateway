@@ -41,7 +41,14 @@ class Group401 extends \Gini\Controller\CGI
             return \Gini\IoC::construct('\Gini\CGI\Response\JSON', $config->tips['nobody']);
         }
 
-        if (!in_array($userInfo->type, ['staff', 'pi', 'admin'])) {
+        $teacherTypes = \Gini\Config::get('gapper.gateway-teacher-types');
+        if ($teacherTypes=='${GATEWAY_TEACHER_TYPES}') {
+            $teacherTypes = ['staff', 'pi', 'admin'];
+        } else {
+            $teacherTypes = implode(',', $teacherTypes);
+        }
+
+        if (!in_array($userInfo->type, $teacherTypes)) {
             // unset($_SESSION['gapper-auth-gateway.username']);
             return \Gini\IoC::construct('\Gini\CGI\Response\JSON', $config->tips['not_staff']);
         }

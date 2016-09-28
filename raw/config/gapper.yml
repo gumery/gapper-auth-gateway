@@ -18,4 +18,5 @@ auth:
     tips:
       nobody: ${GATEWAY_TIP_NOBODY}
       not_staff: ${GATEWAY_TIP_NOT_STAFF}
+gateway-teacher-types: ${GATEWAY_TEACHER_TYPES}
 ...
