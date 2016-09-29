@@ -45,7 +45,7 @@ class Group401 extends \Gini\Controller\CGI
         if ($teacherTypes=='${GATEWAY_TEACHER_TYPES}') {
             $teacherTypes = ['staff', 'pi', 'admin'];
         } else {
-            $teacherTypes = implode(',', $teacherTypes);
+            $teacherTypes = explode(',', $teacherTypes);
         }
 
         if (!in_array($userInfo->type, $teacherTypes)) {
