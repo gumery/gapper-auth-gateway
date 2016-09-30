@@ -19,4 +19,5 @@ auth:
       nobody: ${GATEWAY_TIP_NOBODY}
       not_staff: ${GATEWAY_TIP_NOT_STAFF}
 gateway-teacher-types: ${GATEWAY_TEACHER_TYPES}
+gateway-add-member-title: ${GATEWAY_ADD_MEMBER_TITLE}
 ...
