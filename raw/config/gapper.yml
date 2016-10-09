@@ -20,4 +20,6 @@ auth:
       not_staff: ${GATEWAY_TIP_NOT_STAFF}
 gateway-teacher-types: ${GATEWAY_TEACHER_TYPES}
 gateway-add-member-title: ${GATEWAY_ADD_MEMBER_TITLE}
+gateway-add-member-precise-search: ${GATEWAY_ADD_MEMBER_PRECISE_SEARCH}
+gateway-add-member-allow-annoy: ${GATEWAY_ADD_MEMBER_ALLOW_ANNOY}
 ...
