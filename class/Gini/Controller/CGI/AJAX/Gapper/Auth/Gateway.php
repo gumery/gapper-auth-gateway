@@ -184,20 +184,10 @@ class Gateway extends \Gini\Controller\CGI
             }
         }
 
-        if (!empty($data)) {
-            return \Gini\IoC::construct('\Gini\CGI\Response\JSON', (string)V('gapper/auth/gateway/add-member/match', [
-                'data'=> $data
-            ]));
-        }
-
-        return self::_showFillInfo([
-            'username'=> $keyword,
-            'name'=> '',
-            'email'=> '',
-            'error'=> [
-                '*'=> T('系统后台没有搜到这个用户，如果您确认输入正确，请您完善一下信息:')
-            ]
-        ]);
+        return \Gini\IoC::construct('\Gini\CGI\Response\JSON', (string)V('gapper/auth/gateway/add-member/match', [
+            'keyword'=> $keyword,
+            'data'=> $data
+        ]));
     }
 
     private static function _postAdd($type, $form)

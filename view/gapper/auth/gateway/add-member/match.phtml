@@ -1,37 +1,54 @@
 <div class="text-center add-member-matched" style="max-height:300px;overflow-y:scroll">
-<?php foreach ($data as $vData) {
-    $username = $vData['username'];
-    $name = $vData['name'];
-    $email = $vData['email'];
-    $icon = $vData['icon'];
-    $initials = $vData['initials'];
-    $refNO = $vData['ref_no'];
-    $school = (array)$vData['school'];
-?>
-    <form class="text-center" style="display:inline-block; border-bottom: 1px solid #EAEAEA;">
-        <input type="hidden" name="username" value="<?=H($username)?>" />
-        <input type="hidden" name="name" value="<?=H($name)?>" />
-        <input type="hidden" name="email" value="<?=H($email)?>" />
-        <div class="add-member-icon">
-            <div class="add-member-icon-image">
-                <?php if ($icon && parse_url($icon)['scheme']!='initials') { ?>
-                <img src="<?=H($icon)?>" />
-                <?php } else { ?>
-                <div class="add-member-icon-text">
-                    <?php if ($initials) { ?>
-                        <span><?=H($initials)?></span>
+<?php if (!empty($data)) {?>
+    <?php foreach ($data as $vData) {
+        $username = $vData['username'];
+        $name = $vData['name'];
+        $email = $vData['email'];
+        $icon = $vData['icon'];
+        $initials = $vData['initials'];
+        $refNO = $vData['ref_no'];
+        $school = (array)$vData['school'];
+    ?>
+        <form class="text-center" style="display:inline-block; border-bottom: 1px solid #EAEAEA;">
+            <input type="hidden" name="username" value="<?=H($username)?>" />
+            <input type="hidden" name="name" value="<?=H($name)?>" />
+            <input type="hidden" name="email" value="<?=H($email)?>" />
+            <div class="add-member-icon">
+                <div class="add-member-icon-image">
+                    <?php if ($icon && parse_url($icon)['scheme']!='initials') { ?>
+                    <img src="<?=H($icon)?>" />
                     <?php } else { ?>
-                        <span class="fa fa-question"></span>
+                    <div class="add-member-icon-text">
+                        <?php if ($initials) { ?>
+                            <span><?=H($initials)?></span>
+                        <?php } else { ?>
+                            <span class="fa fa-question"></span>
+                        <?php } ?>
+                    </div>
                     <?php } ?>
                 </div>
-                <?php } ?>
             </div>
+            <div>
+                <div class="add-member-icon-title" title="<?=H(T('姓名: :name', [':name'=>$name?:T('未知用户')]))?>"><?=H(T('姓名: :name', [':name'=>$name?:T('未知用户')]))?></div>
+                <div class="add-member-icon-title" title="<?=H(T(':refno', [':refno'=>$refNO?:'--']))?>"><?=H(T(':refno', [':refno'=>$refNO?:'--']))?></div>
+            </div>
+            <div style="padding-bottom:5px;"><input type="button" class="add-member-confirm btn btn-primary" value="<?=H(T('确认添加'))?>" /></div>
+        </form>
+    <?php }?>
+    </div>
+<?php } else { ?>
+    <form class="text-center" style="display:inline-block; border-bottom: 1px solid #EAEAEA;">
+        <input type="hidden" name="username" value="<?=H($keyword)?>" />
+        <div class="text-danger"><?=H(T('统后台没有搜到这个用户，如果您确认输入正确，请您完善信息:'))?></div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><?=H(T('姓名'))?></label>
+            <input class="form-control" type="text" name="name" value="" />
         </div>
-        <div>
-            <div class="add-member-icon-title" title="<?=H(T('姓名: :name', [':name'=>$name?:T('未知用户')]))?>"><?=H(T('姓名: :name', [':name'=>$name?:T('未知用户')]))?></div>
-            <div class="add-member-icon-title" title="<?=H(T(':refno', [':refno'=>$refNO?:'--']))?>"><?=H(T(':refno', [':refno'=>$refNO?:'--']))?></div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label"><?=H(T('邮箱'))?></label>
+            <input class="form-control" type="text" name="email" value="" />
+            <div class="text-right text-muted"><small><?=H(T('请使用正确的Email, 该Email一经添加不允许更改!'))?></small></div>
         </div>
         <div style="padding-bottom:5px;"><input type="button" class="add-member-confirm btn btn-primary" value="<?=H(T('确认添加'))?>" /></div>
     </form>
 <?php }?>
-</div>
