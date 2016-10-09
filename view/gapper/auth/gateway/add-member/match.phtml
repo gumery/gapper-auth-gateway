@@ -37,17 +37,17 @@
     <?php }?>
     </div>
 <?php } else { ?>
+    <div class="text-danger"><?=H(T('系统后台没有搜到这个用户，如果您确认输入正确，请您完善信息:'))?></div>
     <form class="text-center" style="display:inline-block; border-bottom: 1px solid #EAEAEA;">
         <input type="hidden" name="username" value="<?=H($keyword)?>" />
-        <div class="text-danger"><?=H(T('统后台没有搜到这个用户，如果您确认输入正确，请您完善信息:'))?></div>
         <div class="form-group">
-            <label class="col-sm-2 control-label"><?=H(T('姓名'))?></label>
+            <label class="col-sm-2 control-label nowrap"><?=H(T('姓名'))?></label>
             <input class="form-control" type="text" name="name" value="" />
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label"><?=H(T('邮箱'))?></label>
+            <label class="col-sm-2 control-label nowrap"><?=H(T('邮箱'))?></label>
             <input class="form-control" type="text" name="email" value="" />
-            <div class="text-right text-muted"><small><?=H(T('请使用正确的Email, 该Email一经添加不允许更改!'))?></small></div>
+            <div class="text-right text-muted"><small><?=H(T('该Email一经添加不允许更改!'))?></small></div>
         </div>
         <div style="padding-bottom:5px;"><input type="button" class="add-member-confirm btn btn-primary" value="<?=H(T('确认添加'))?>" /></div>
     </form>
