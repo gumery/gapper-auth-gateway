@@ -1,7 +1,7 @@
 <div class="text-center add-member-matched" style="max-height:400px;overflow-y:auto">
 <?php 
 $vAllowAddAnony = \Gini\Config::get('gapper.gateway-add-member-allow-annoy');
-$vAllowAddAnony = $vAllowAddAnony ? ($vAllowAddAnony=='${GATEWAY_ADD_MEMBER_ALLOW_ANNOY}' ? false : true) : false;
+$vAllowAddAnony = $vAllowAddAnony ? ($vAllowAddAnony==='${GATEWAY_ADD_MEMBER_ALLOW_ANNOY}' ? false : true) : false;
 if (!empty($data)) {?>
     <?php foreach ($data as $vData) {
         $username = $vData['username'];
