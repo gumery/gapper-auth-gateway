@@ -42,7 +42,7 @@ class Group401 extends \Gini\Controller\CGI
         }
 
         $teacherTypes = \Gini\Config::get('gapper.gateway-teacher-types');
-        if ($teacherTypes=='${GATEWAY_TEACHER_TYPES}') {
+        if (!$teacherTypes || $teacherTypes=='${GATEWAY_TEACHER_TYPES}') {
             $teacherTypes = ['staff', 'pi', 'admin'];
         } else {
             $teacherTypes = explode(',', $teacherTypes);
