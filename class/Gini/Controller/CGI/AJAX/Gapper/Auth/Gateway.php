@@ -64,6 +64,10 @@ class Gateway extends \Gini\Controller\CGI
             return $this->showJSON(T('Login failed! Please try again.'));
         }
 
+        if (false===$info) {
+            return $this->showJSON(T('Login failed! Please try again.'));
+        }
+
         // 一卡通号没有对应的gapper用户，需要激活，进入group401进行用户和组的激活
         if (empty($info)) {
             return \Gini\CGI::request('ajax/gapper/step/group401', $this->env)->execute();
