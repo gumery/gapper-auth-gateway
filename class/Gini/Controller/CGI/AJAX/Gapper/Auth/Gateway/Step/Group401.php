@@ -170,15 +170,14 @@ class Group401 extends \Gini\Controller\CGI
 
                 // 如果没有Gapper用户, 首先创建Gapper用户
                 if (!\Gini\Gapper\Client::getUserName()) {
-                    $uid = $gapperRPC->gapper->user->registerUser([
+                    $uid = $gapperRPC->gapper->user->registerUserWithIdentity([
                         'username' => $email,
                         'password' => \Gini\Util::randPassword(),
                         'name' => $name,
                         'email' => $email,
-                    ]);
+                    ], $config->source, $identity);
                     if ($uid) {
                         \Gini\Gapper\Client::loginByUserName($email);
-                        \Gini\Gapper\Client::linkIdentity($config->source, $identity);
                     }
 
                     if (!\Gini\Gapper\Client::getUserName()) {

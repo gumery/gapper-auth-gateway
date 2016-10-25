@@ -274,32 +274,30 @@ class Gateway extends \Gini\Controller\CGI
         }
 
         try {
-            $uid = \Gini\Gapper\Client::getRPC()->gapper->user->registerUser([
+            $infos = (array)\Gini\Config::get('gapper.auth');
+            $gInfo = (object)$infos['gateway'];
+            $identitySource = @$gInfo->source;
+            
+            $uid = \Gini\Gapper\Client::getRPC()->gapper->user->registerUserWithIdentity([
                 'username'=> $email,
                 'password'=> \Gini\Util::randPassword(),
                 'name'=> $name,
                 'email'=> $email
-            ]);
+            ], $identitySource, $username);
+            if (!$uid) {
+                throw new \Exception();
+            }
+            $bool = \Gini\Gapper\Client::getRPC()->gapper->group->addMember((int)$current, (int)$uid);
         } catch (\Exception $e) {
             return self::_alert(T('操作失败，请您重试'));
         }
         if (!$uid) return self::_alert(T('添加用户失败, 请重试!'));
 
         try {
-            $infos = (array)\Gini\Config::get('gapper.auth');
-            $gInfo = (object)$infos['gateway'];
-            $identitySource = @$gInfo->source;
-            $bool = \Gini\Gapper\Client::getRPC()->gapper->user->linkIdentity((int)$uid, $identitySource, $username);
         } catch (\Exception $e) {
             return self::_alert(T('操作失败，请您重试'));
         }
         if (!$bool) return self::_alert(T('用户添加失败, 请换一个Email试试!'));
-
-        try {
-            $bool = \Gini\Gapper\Client::getRPC()->gapper->group->addMember((int)$current, (int)$uid);
-        } catch (\Exception $e) {
-            return self::_alert(T('操作失败，请您重试'));
-        }
 
         if ($bool) {
             $info = \Gini\Gapper\Client::getRPC()->gapper->user->getInfo((int)$uid);
