@@ -64,7 +64,7 @@ class Gateway extends \Gini\Controller\CGI
             return $this->showJSON(T('Login failed! Please try again.'));
         }
 
-        if (false===$info) {
+        if (null===$info || false===$info) {
             return $this->showJSON(T('Login failed! Please try again.'));
         }
 
