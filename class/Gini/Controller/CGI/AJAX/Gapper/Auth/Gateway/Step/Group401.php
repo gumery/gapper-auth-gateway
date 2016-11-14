@@ -13,7 +13,7 @@ class Group401 extends \Gini\Controller\CGI
     public function __index()
     {
         $appIds = (array) \Gini\Config::get('app.auto_install_apps_for_new_group');
-        if (empty($appInfo)) {
+        if (empty($appIds)) {
             return \Gini\IoC::construct('\Gini\CGI\Response\JSON', T('您无权访问该应用，请联系系统管理员'));
         }
         $myClientID = \Gini\Gapper\Client::getId();
