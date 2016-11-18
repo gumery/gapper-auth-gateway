@@ -51,7 +51,8 @@ class Gateway
 
     public static function getBuildings($campus)
     {
-        $cacheKey = "gateway/location/campus.$campus/buildings";
+        $md5 = md5(J($campus));
+        $cacheKey = "gateway/location/campus.$md5/buildings";
         $data = self::cache($cacheKey);
         if (empty($data)) {
             $data = (array)self::getGatewayRPC()->Gateway->Location->getBuildings($campus);
@@ -59,6 +60,20 @@ class Gateway
         }
         return $data;
     }
+
+    public static function getRooms($building) 
+    {
+        $md5 = md5(J($buildings));
+        $cacheKey = "gateway/location/campus.$md5/rooms";
+        $data = self::cache($cacheKey);
+        if (empty($data)) {
+            $data = (array)self::getGatewayRPC()->Gateway->Location->getBuildings($building);
+            self::cache($cacheKey, $data);
+        }
+        return $data;
+    }
+
+
 
     public static function getUserInfo($username)
     {
