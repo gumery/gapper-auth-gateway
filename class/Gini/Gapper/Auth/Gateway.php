@@ -67,7 +67,7 @@ class Gateway
         $cacheKey = "gateway/location/building.$md5/rooms";
         $data = self::cache($cacheKey);
         if (empty($data)) {
-            $data = (array)self::getGatewayRPC()->Gateway->Location->getBuildings($building);
+            $data = (array)self::getGatewayRPC()->Gateway->Location->getRooms($building);
             self::cache($cacheKey, $data);
         }
         return $data;
