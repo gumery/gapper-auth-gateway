@@ -25,10 +25,13 @@ class Location extends \Gini\Controller\CGI
         $data = (array) \Gini\Gapper\Auth\Gateway::getRooms(['building'=>$building]);
         $new = [];
         foreach ($data as $d) {
-            $new[$d['name']] = $d['name'];
+            $new[] = [
+                'code'=> $d['name'],
+                'name'=> $d['name']
+            ];
         }
         return \Gini\IoC::construct('\Gini\CGI\Response\JSON', [
-            'data'=> array_values($new)
+            'data'=> $new
         ]);
     }
 }
