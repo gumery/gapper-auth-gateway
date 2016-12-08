@@ -35,11 +35,32 @@ define('gapper/auth/gateway/select-organization', ['jquery'], function($) {
         });
     };
 
+    var initRooms = function(pid, vid) {
+        var $currentRoomC = $('.control-room-container');
+        if (!$currentRoomC.length) return;
+        $currentRoomC.html('--');
+        if (pid) $.get(['ajax/gapper/auth/gateway/location/get-rooms/', pid].join(''), function(result) {
+            result = result || {};
+            var data = result.data;
+            if ($.isArray(data) && data.length) {
+                var $control = $('<select class="form-control"></select>');
+                doSelect($control, result, vid);
+            } else {
+                var $control = '<input type="text" name="room" class="form-control" />';
+                $control.attr('value', vid);
+            }
+            $currentRoomC.empty().append($control);
+        });
+    };
+
     var initBuildings = function(pid, vid) {
         var $buildingHandler = $('select[name=building]');
         $buildingHandler.html('<option value="">--</option>');
+        var $currentRoomC = $('.control-room-container');
+        if ($currentRoomC.length) var currentRoom = $currentRoomC.attr('data-value');
         if (pid) $.get(['ajax/gapper/auth/gateway/location/get-buildings/', pid].join(''), function(result) {
             doSelect($buildingHandler, result, vid);
+            initRooms(vid, currentRoom);
         });
     };
 
