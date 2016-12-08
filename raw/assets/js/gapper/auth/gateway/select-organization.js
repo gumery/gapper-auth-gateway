@@ -46,8 +46,8 @@ define('gapper/auth/gateway/select-organization', ['jquery'], function($) {
                 var $control = $('<select name="room" class="form-control"></select>');
                 doSelect($control, result, vid);
             } else {
-                var $control = '<input type="text" name="room" class="form-control" />';
-                $control.attr('value', vid);
+                var $control = $('<input type="text" name="room" class="form-control" />');
+                $control.val(vid);
             }
             $currentRoomC.empty().append($control);
         });

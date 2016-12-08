@@ -126,11 +126,25 @@ class Group401 extends \Gini\Controller\CGI
                 }
 
                 if ($building && $campus) {
-                    $data = (array)\Gini\Gapper\Auth\Gateway::getBuildings($campus);
+                    $data = (array)\Gini\Gapper\Auth\Gateway::getBuildings(['campus'=>$campus]);
                     foreach ($data as $d) {
                         if ($building == $d['code']) {
-                            $building_name = $l['name'];
+                            $building_name = $d['name'];
                             break;
+                        }
+                    }
+                }
+
+                if ($room && $building && $campus) {
+                    $data = (array)\Gini\Gapper\Auth\Gateway::getRooms(['building'=>$building]);
+                    if (empty($data)) {
+                        $room_name = $room;
+                    } else {
+                        foreach ($data as $d) {
+                            if ($room== $d['name']) {
+                                $room_name = $d['name'];
+                                break;
+                            }
                         }
                     }
                 }
@@ -172,7 +186,7 @@ class Group401 extends \Gini\Controller\CGI
                 }
                 
                 if (!!$config->form_requires['room']) {
-                    $validator->validate('room', $room, T('请输入您的房间'));
+                    $validator->validate('room', $room_name, T('请输入您的房间'));
                 }
 
                 $validator->done();
