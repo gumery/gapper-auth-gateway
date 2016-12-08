@@ -38,7 +38,9 @@ define('gapper/auth/gateway/select-organization', ['jquery'], function($) {
     var initRooms = function(pid, vid) {
         var $currentRoomC = $('.control-room-container');
         if (!$currentRoomC.length) return;
-        $currentRoomC.html('--');
+        var $control = $('<input type="text" name="room" class="form-control" />');
+        $control.attr('readonly', 'readonly');
+        $currentRoomC.empty().append($control);
         if (pid) $.get(['ajax/gapper/auth/gateway/location/get-rooms/', pid].join(''), function(result) {
             result = result || {};
             var data = result.data;
