@@ -43,7 +43,7 @@ define('gapper/auth/gateway/select-organization', ['jquery'], function($) {
             result = result || {};
             var data = result.data;
             if ($.isArray(data) && data.length) {
-                var $control = $('<select class="form-control"></select>');
+                var $control = $('<select name="room" class="form-control"></select>');
                 doSelect($control, result, vid);
             } else {
                 var $control = '<input type="text" name="room" class="form-control" />';
@@ -85,6 +85,13 @@ define('gapper/auth/gateway/select-organization', ['jquery'], function($) {
     $('body').on('change', 'select[name=campus]', function() {
         $(this).attr('data-value', $(this).val());
         initCampuses(true);
+    });
+
+    $('body').on('change', 'select[name=building]', function() {
+        $(this).attr('data-value', $(this).val());
+        var $currentRoomC = $('.control-room-container');
+        if ($currentRoomC.length) var currentRoom = $currentRoomC.attr('data-value');
+        initRooms($(this).val(), currentRoom);
     });
 
     var run = function() {
