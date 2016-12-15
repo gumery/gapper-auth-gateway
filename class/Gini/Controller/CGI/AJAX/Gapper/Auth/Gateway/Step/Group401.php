@@ -215,6 +215,7 @@ class Group401 extends \Gini\Controller\CGI
                     'delimiter' => '',
                     'accent' => false,
                 ]);
+                $titlePinyin = preg_replace('#[^a-zA-Z_]#', '', $titlePinyin);
                 $groupName = $gapperRPC
                     ->gapper->group->getRandomGroupName($titlePinyin);
                 $validator->validate('*', !!$groupName, T('课题组标识冲突，请重试!'))->done();
