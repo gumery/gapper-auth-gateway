@@ -128,6 +128,9 @@ class Gateway
         if (is_null($value)) {
             return $cacher->get($key);
         }
-        $cacher->set($key, $value, 60);
+        $config = \Gini\Config::get('cache.default');
+        $timeout = @$config['timeout'];
+        $timeout = is_numeric($timeout) ? $timeout : 500;
+        $cacher->set($key, $value, $timeout);
     }
 }
