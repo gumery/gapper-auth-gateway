@@ -343,8 +343,7 @@ class Group401 extends \Gini\Controller\CGI
             'icon' => $config->icon,
             'type' => $config->name,
             'form'=> $form,
-            'step'=> $myStep,
-            'needFillData'=> in_array($myStep, ['set-group-tag', 'install-apps', 'login-group']) ? false : true,
+            'needFillData'=> in_array($_SESSION['gapper-auth-gateway.new-created-step'], ['set-group-tag', 'install-apps', 'login-group']) ? false : true,
             'error' => $error,
             'userNameChangable' => $userNameChangable,
         ];
