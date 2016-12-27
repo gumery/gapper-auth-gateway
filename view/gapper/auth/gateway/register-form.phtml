@@ -14,120 +14,125 @@
                     </div>
                 </dt>
                 <dd style="padding-right:30px;">
-                    <h4><?=H(T('请您补全相关信息:'))?></h4>
-                    <?php if ($error['*']) {?>
-                    <div class="form-group text-danger"><?=H($error['*'])?></div>
-                    <?php } ?>
+                    <?php if ($needFillData) {?>
+                        <h4><?=H(T('请您补全相关信息:'))?></h4>
+                        <?php if ($error['*']) {?>
+                        <div class="form-group text-danger"><?=H($error['*'])?></div>
+                        <?php } ?>
+                        <?php if (!\Gini\Gapper\Client::getUserName()) { ?>
+                        <div class="form-group">
+                            <div class="text-right" style="clear:right">
+                                <span class="pull-left"><?=H(T('姓名'))?></span>
+                                <?php if ($error['name']) { ?>
+                                <span class="text-danger"><small><?=H($error['name'])?></small></span>
+                                <?php }?>
+                            </div>
+                            <div class="<?=$error['name'] ? ' has-error' : ''?>">
+                                <input class="form-control" type="text" name="name" value="<?=H($form['name'])?>" <?= $userNameChangable ? '':'readonly'?>/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="text-right" style="clear:right">
+                                <span class="pull-left"><?=H(T('Email'))?></span>
+                                <?php if ($error['email']) { ?>
+                                <span class="text-danger"><small><?=H($error['email'])?></small></span>
+                                <?php }?>
+                            </div>
+                            <div class="<?=$error['email'] ? ' has-error' : ''?>">
+                                <input class="form-control" type="text" name="email" value="<?=H($form['email'])?>" />
+                            </div>
+                            <div class="text-right text-muted"><small><?=H(T('请使用正确的Email, 该Email一经注册不允许更改!'))?></small></div>
+                        </div>
+                        <?php }?>
 
-                    <?php if (!\Gini\Gapper\Client::getUserName()) { ?>
-                    <div class="form-group">
-                        <div class="text-right" style="clear:right">
-                            <span class="pull-left"><?=H(T('姓名'))?></span>
-                            <?php if ($error['name']) { ?>
-                            <span class="text-danger"><small><?=H($error['name'])?></small></span>
-                            <?php }?>
+                        <div class="form-group">
+                            <div class="text-right" style="clear:right">
+                                <span class="pull-left"><?=H(T('院系'))?></span>
+                                <?php if ($error['school']) { ?>
+                                <span class="text-danger"><small><?=H($error['school'])?></small></span>
+                                <?php }?>
+                            </div>
+                            <div class="<?=$error['school'] ? ' has-error' : ''?>">
+                                <select name="school" data-value="<?=H($form['school'])?>" class="form-control">
+                                    <option value="">--</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="<?=$error['name'] ? ' has-error' : ''?>">
-                            <input class="form-control" type="text" name="name" value="<?=H($form['name'])?>" <?= $userNameChangable ? '':'readonly'?>/>
+
+                        <div class="form-group">
+                            <div class="text-right" style="clear:right">
+                                <span class="pull-left"><?=H(T('专业'))?></span>
+                                <?php if ($error['department']) { ?>
+                                <span class="text-danger"><small><?=H($error['department'])?></small></span>
+                                <?php }?>
+                            </div>
+                            <div class="<?=$error['department'] ? ' has-error' : ''?>">
+                                <select name="department" data-value="<?=H($form['department'])?>" class="form-control">
+                                    <option value="">--</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="text-right" style="clear:right">
-                            <span class="pull-left"><?=H(T('Email'))?></span>
-                            <?php if ($error['email']) { ?>
-                            <span class="text-danger"><small><?=H($error['email'])?></small></span>
-                            <?php }?>
+
+                        <div class="form-group">
+                            <div class="text-right" style="clear:right">
+                                <span class="pull-left"><?=H(T('校区'))?></span>
+                                <?php if ($error['campus']) { ?>
+                                <span class="text-danger"><small><?=H($error['campus'])?></small></span>
+                                <?php }?>
+                            </div>
+                            <div class="<?=$error['campus'] ? ' has-error' : ''?>">
+                                <select name="campus" data-value="<?=H($form['campus'])?>" class="form-control">
+                                    <option value="">--</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="<?=$error['email'] ? ' has-error' : ''?>">
-                            <input class="form-control" type="text" name="email" value="<?=H($form['email'])?>" />
+
+                        <div class="form-group">
+                            <div class="text-right" style="clear:right">
+                                <span class="pull-left"><?=H(T('楼宇'))?></span>
+                                <?php if ($error['building']) { ?>
+                                <span class="text-danger"><small><?=H($error['building'])?></small></span>
+                                <?php }?>
+                            </div>
+                            <div class="<?=$error['building'] ? ' has-error' : ''?>">
+                                <select name="building" data-value="<?=H($form['building'])?>" class="form-control">
+                                    <option value="">--</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="text-right text-muted"><small><?=H(T('请使用正确的Email, 该Email一经注册不允许更改!'))?></small></div>
-                    </div>
+
+                        <div class="form-group">
+                            <div class="text-right" style="clear:right">
+                                <span class="pull-left"><?=H(T('房间'))?></span>
+                                <?php if ($error['room']) { ?>
+                                <span class="text-danger"><small><?=H($error['room'])?></small></span>
+                                <?php }?>
+                            </div>
+                            <div class="control-room-container<?=$error['room'] ? ' has-error' : ''?>" data-value="<?= H($form['room']) ?>">
+                                <input type="text" class="form-control" readonly="readonly">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="text-right" style="clear:right">
+                                <span class="pull-left"><?=H(T('组名'))?></span>
+                                <?php if ($error['title']) { ?>
+                                <span class="text-danger"><small><?=H($error['title'])?></small></span>
+                                <?php }?>
+                            </div>
+                            <div class="<?=$error['title'] ? ' has-error' : ''?>">
+                                <input class="form-control" type="text" name="title" value="<?=H($form['title'])?>" <?= $userNameChangable ? '':'readonly'?>/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control btn btn-primary" type="submit" value="<?=H(T('提交'))?>"/>
+                        </div>
+                    <?php } else { ?>
+                        <div class="form-group text-danger"><?=H(T('课题组信息创建成功，因为网络异常，部分信息丢失，建议您继续提交，补全信息。'))?></div>
+                        <div class="form-group">
+                            <input class="form-control btn btn-primary" type="submit" value="<?=H(T('提交'))?>"/>
+                        </div>
                     <?php }?>
-
-                    <div class="form-group">
-                        <div class="text-right" style="clear:right">
-                            <span class="pull-left"><?=H(T('院系'))?></span>
-                            <?php if ($error['school']) { ?>
-                            <span class="text-danger"><small><?=H($error['school'])?></small></span>
-                            <?php }?>
-                        </div>
-                        <div class="<?=$error['school'] ? ' has-error' : ''?>">
-                            <select name="school" data-value="<?=H($form['school'])?>" class="form-control">
-                                <option value="">--</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="text-right" style="clear:right">
-                            <span class="pull-left"><?=H(T('专业'))?></span>
-                            <?php if ($error['department']) { ?>
-                            <span class="text-danger"><small><?=H($error['department'])?></small></span>
-                            <?php }?>
-                        </div>
-                        <div class="<?=$error['department'] ? ' has-error' : ''?>">
-                            <select name="department" data-value="<?=H($form['department'])?>" class="form-control">
-                                <option value="">--</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="text-right" style="clear:right">
-                            <span class="pull-left"><?=H(T('校区'))?></span>
-                            <?php if ($error['campus']) { ?>
-                            <span class="text-danger"><small><?=H($error['campus'])?></small></span>
-                            <?php }?>
-                        </div>
-                        <div class="<?=$error['campus'] ? ' has-error' : ''?>">
-                            <select name="campus" data-value="<?=H($form['campus'])?>" class="form-control">
-                                <option value="">--</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="text-right" style="clear:right">
-                            <span class="pull-left"><?=H(T('楼宇'))?></span>
-                            <?php if ($error['building']) { ?>
-                            <span class="text-danger"><small><?=H($error['building'])?></small></span>
-                            <?php }?>
-                        </div>
-                        <div class="<?=$error['building'] ? ' has-error' : ''?>">
-                            <select name="building" data-value="<?=H($form['building'])?>" class="form-control">
-                                <option value="">--</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="text-right" style="clear:right">
-                            <span class="pull-left"><?=H(T('房间'))?></span>
-                            <?php if ($error['room']) { ?>
-                            <span class="text-danger"><small><?=H($error['room'])?></small></span>
-                            <?php }?>
-                        </div>
-                        <div class="control-room-container<?=$error['room'] ? ' has-error' : ''?>" data-value="<?= H($form['room']) ?>">
-                            <input type="text" class="form-control" readonly="readonly">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="text-right" style="clear:right">
-                            <span class="pull-left"><?=H(T('组名'))?></span>
-                            <?php if ($error['title']) { ?>
-                            <span class="text-danger"><small><?=H($error['title'])?></small></span>
-                            <?php }?>
-                        </div>
-                        <div class="<?=$error['title'] ? ' has-error' : ''?>">
-                            <input class="form-control" type="text" name="title" value="<?=H($form['title'])?>" <?= $userNameChangable ? '':'readonly'?>/>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <input class="form-control btn btn-primary" type="submit" value="<?=H(T('提交'))?>"/>
-                    </div>
                 </dd>
             </dl></form>
         </div>
