@@ -64,11 +64,9 @@ class Group401 extends \Gini\Controller\CGI
 
         $userNameChangable = $config->user_name_changable;
 
-        $myStep = $form['step'];
+        $gapperRPC = \Gini\Gapper\Client::getRPC();
+        $myStep = $_SESSION['gapper-auth-gateway.new-created-step'];
         if ($myStep == 'active') {
-            $gapperRPC = \Gini\Gapper\Client::getRPC();
-            $gatewayRPC = $this->_getGatewayRPC();
-
             if ($userNameChangable) {
                 $name = trim($form['name']);
                 $title = trim($form['title']);
@@ -251,20 +249,21 @@ class Group401 extends \Gini\Controller\CGI
 
                 $_SESSION['gapper-auth-gateway.new-created-group-id'] = $gid;
                 $_SESSION['gapper-auth-gateway.new-created-group-tag'] = J($tagData);
-                $form['step'] = 'set-group-tag';
+                $_SESSION['gapper-auth-gateway.new-created-step'] = 'set-group-tag';
 
                 $this->_setTagData($gid, $tagData);
                 unset($_SESSION['gapper-auth-gateway.new-created-group-tag']);
 
-                $form['step'] = 'install-apps';
+                $_SESSION['gapper-auth-gateway.new-created-step'] = 'install-apps';
                 // 3. 自动安装组相关应用
                 $appIds = (array) \Gini\Config::get('app.auto_install_apps_for_new_group');
                 foreach ($appIds as $appId) {
                     $gapperRPC->gapper->app->installTo($appId, 'group', (int) $gid);
                 }
 
-                $form['step'] = 'login-group';
+                $_SESSION['gapper-auth-gateway.new-created-step'] = 'login-group';
                 \Gini\Gapper\Client::chooseGroup((int)$gid, true);
+                $_SESSION['gapper-auth-gateway.new-created-step'] = 'done';
 
                 return \Gini\IoC::construct('\Gini\CGI\Response\JSON', true);
             }
@@ -281,18 +280,19 @@ class Group401 extends \Gini\Controller\CGI
                 $tagData = $_SESSION['gapper-auth-gateway.new-created-group-tag'];
                 $tagData = @json_decode($tagData, true);
                 if (!$gid || !$tagData) {
-                    $form['step'] = 'active';
+                    $_SESSION['gapper-auth-gateway.new-created-step'] = 'active';
                     throw new \Exception();
                 }
                 $this->_setTagData($gid, $tagData);
-                $form['step'] = 'install-apps';
+                $_SESSION['gapper-auth-gateway.new-created-step'] = 'install-apps';
                 $appIds = (array) \Gini\Config::get('app.auto_install_apps_for_new_group');
                 foreach ($appIds as $appId) {
                     $gapperRPC->gapper->app->installTo($appId, 'group', (int) $gid);
                 }
 
-                $form['step'] = 'login-group';
+                $_SESSION['gapper-auth-gateway.new-created-step'] = 'login-group';
                 \Gini\Gapper\Client::chooseGroup((int)$gid, true);
+                $_SESSION['gapper-auth-gateway.new-created-step'] = 'done';
                 return \Gini\IoC::construct('\Gini\CGI\Response\JSON', true);
             } catch (\Exception $e) {
                 $error['*'] = T('目前网络不稳定，建议您重新提交该表单');
@@ -301,7 +301,7 @@ class Group401 extends \Gini\Controller\CGI
             try {
                 $gid = $_SESSION['gapper-auth-gateway.new-created-group-id'];
                 if (!$gid) {
-                    $form['step'] = 'active';
+                    $_SESSION['gapper-auth-gateway.new-created-step'] = 'active';
                     throw new \Exception();
                 }
                 $appIds = (array) \Gini\Config::get('app.auto_install_apps_for_new_group');
@@ -309,8 +309,9 @@ class Group401 extends \Gini\Controller\CGI
                     $gapperRPC->gapper->app->installTo($appId, 'group', (int) $gid);
                 }
 
-                $form['step'] = 'login-group';
+                $_SESSION['gapper-auth-gateway.new-created-step'] = 'login-group';
                 \Gini\Gapper\Client::chooseGroup((int)$gid, true);
+                $_SESSION['gapper-auth-gateway.new-created-step'] = 'done';
                 return \Gini\IoC::construct('\Gini\CGI\Response\JSON', true);
             } catch (\Exception $e) {
                 $error['*'] = T('目前网络不稳定，建议您重新提交该表单');
@@ -319,14 +320,17 @@ class Group401 extends \Gini\Controller\CGI
             try {
                 $gid = $_SESSION['gapper-auth-gateway.new-created-group-id'];
                 if (!$gid) {
-                    $form['step'] = 'active';
+                    $_SESSION['gapper-auth-gateway.new-created-step'] = 'active';
                     throw new \Exception();
                 }
                 \Gini\Gapper\Client::chooseGroup((int)$gid, true);
+                $_SESSION['gapper-auth-gateway.new-created-step'] = 'done';
                 return \Gini\IoC::construct('\Gini\CGI\Response\JSON', true);
             } catch (\Exception $e) {
                 $error['*'] = T('目前网络不稳定，建议您重新提交该表单');
             }
+        } else if ($myStep=='done') {
+            return \Gini\IoC::construct('\Gini\CGI\Response\JSON', true);
         } else {
             $form['name'] = $userInfo->name;
             $form['title'] = T('%name课题组', ['%name'=>$userInfo->name]);
@@ -339,8 +343,8 @@ class Group401 extends \Gini\Controller\CGI
             'icon' => $config->icon,
             'type' => $config->name,
             'form'=> $form,
-            'step'=> $form['step'],
-            'needFillData'=> in_array($form['step'], ['set-group-tag', 'install-apps', 'login-group']) ? false : true,
+            'step'=> $myStep,
+            'needFillData'=> in_array($myStep, ['set-group-tag', 'install-apps', 'login-group']) ? false : true,
             'error' => $error,
             'userNameChangable' => $userNameChangable,
         ];
