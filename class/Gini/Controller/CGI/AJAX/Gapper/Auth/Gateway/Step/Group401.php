@@ -35,7 +35,7 @@ class Group401 extends \Gini\Controller\CGI
         }
 
         if (\Gini\Gapper\Client::getUserName() && $this->_hasGroup()) {
-            return $this->_showError();
+            return \Gini\IoC::construct('\Gini\CGI\Response\JSON', true);
         }
 
         if ($identity) {
