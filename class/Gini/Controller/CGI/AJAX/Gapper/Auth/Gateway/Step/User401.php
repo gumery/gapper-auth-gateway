@@ -6,7 +6,8 @@ class User401 extends \Gini\Controller\CGI
 {
     public function __index()
     {
-        if (!\Gini\Gapper\Client::getUserName()) {
+        $user = \Gini\Gapper\Client::getUserInfo();
+        if (!$user['id']) {
             return $this->_showError();
         }
 
@@ -20,7 +21,7 @@ class User401 extends \Gini\Controller\CGI
         }
 
         $gapperRPC = \Gini\Gapper\Client::getRPC();
-        if (!$gapperRPC->gapper->app->installTo($appId, 'user', (int) $gid)) {
+        if (!$gapperRPC->gapper->app->installTo($appId, 'user', $user['id'])) {
             return \Gini\IoC::construct('\Gini\CGI\Response\JSON', T('您无权访问该应用，请联系系统管理员'));
         }
 
