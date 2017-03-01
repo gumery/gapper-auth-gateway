@@ -1,5 +1,6 @@
 ---
 auth-default-group-401: gateway
+auth-default-user-401: gateway
 auth:
   gateway:
     source: ${GATEWAY_IDENTITY_SOURCE}
