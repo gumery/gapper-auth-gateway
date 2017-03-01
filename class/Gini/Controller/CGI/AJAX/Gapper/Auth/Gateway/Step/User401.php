@@ -25,6 +25,7 @@ class User401 extends \Gini\Controller\CGI
             return \Gini\IoC::construct('\Gini\CGI\Response\JSON', T('您无权访问该应用，请联系系统管理员'));
         }
 
+        \Gini\Gapper\Client::getUserApps(\Gini\Gapper\Client::getUserName(), true);
 
         return \Gini\IoC::construct('\Gini\CGI\Response\JSON', true);
     }
