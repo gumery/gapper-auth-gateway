@@ -113,7 +113,8 @@ class Gateway
 
     public static function getDepartments($school)
     {
-        $cacheKey = "gateway/organization/school.$school/departments";
+        $key = md5(J($school));
+        $cacheKey = "gateway/organization/school.$key/departments";
         $data = self::cache($cacheKey);
         if (empty($data)) {
             $criteria = ['school'=>$school];
