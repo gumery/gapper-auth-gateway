@@ -77,7 +77,8 @@ class Gateway
 
     public static function getUserInfo($username)
     {
-        $cacheKey = "gateway/people/user.$username/info";
+        $key = md5(J($username));
+        $cacheKey = "gateway/people/user.$key/info";
         $data = self::cache($cacheKey);
         if (empty($data)) {
             $data = (array)self::getGatewayRPC()->Gateway->People->getUser($username);
