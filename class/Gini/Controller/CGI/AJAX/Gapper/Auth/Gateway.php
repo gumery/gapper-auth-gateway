@@ -70,6 +70,10 @@ class Gateway extends \Gini\Controller\CGI
 
         // 一卡通号没有对应的gapper用户，需要激活，进入group401进行用户和组的激活
         if (empty($info)) {
+            $appInfo = \Gini\Gapper\Client::getInfo();
+            if (strtolower($appInfo['type'])=='user') {
+                return \Gini\CGI::request('ajax/gapper/step/user401', $this->env)->execute();
+            } 
             return \Gini\CGI::request('ajax/gapper/step/group401', $this->env)->execute();
         }
 
