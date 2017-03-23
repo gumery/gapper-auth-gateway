@@ -53,15 +53,8 @@ class User401 extends \Gini\Controller\CGI
         // }
 
         if (isset($form['email'])) {
-            $school = trim($form['school']);
-            $department = trim($form['department']);
             $name = trim($form['name']);
             $email = trim($form['email']);
-
-            $school_code = '';
-            $school_name = '';
-            $department_code = '';
-            $department_name = '';
 
             $validator = new \Gini\CGI\Validator();
             try {
