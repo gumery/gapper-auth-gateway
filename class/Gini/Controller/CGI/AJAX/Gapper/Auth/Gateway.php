@@ -30,7 +30,7 @@ class Gateway extends \Gini\Controller\CGI
     /**
         * @brief 执行登录逻辑
         *
-        * @return 
+        * @return
      */
     public function actionLogin()
     {
@@ -61,11 +61,11 @@ class Gateway extends \Gini\Controller\CGI
             $rpc = \Gini\Gapper\Client::getRPC();
             $info = $rpc->Gapper->User->getUserByIdentity($config->source, $username);
         } catch (\Exception $e) {
-            return $this->showJSON(T('Login failed! Please try again.'));
+            return $this->showJSON(T('网络异常，请重试'));
         }
 
         if (null===$info || false===$info) {
-            return $this->showJSON(T('Login failed! Please try again.'));
+            return $this->showJSON(T('获取用户登录信息失败，请重试'));
         }
 
         // 一卡通号没有对应的gapper用户，需要激活，进入group401进行用户和组的激活
@@ -73,7 +73,7 @@ class Gateway extends \Gini\Controller\CGI
             $appInfo = \Gini\Gapper\Client::getInfo();
             if (strtolower($appInfo['type'])=='user') {
                 return \Gini\CGI::request('ajax/gapper/step/user401', $this->env)->execute();
-            } 
+            }
             return \Gini\CGI::request('ajax/gapper/step/group401', $this->env)->execute();
         }
 
@@ -83,14 +83,14 @@ class Gateway extends \Gini\Controller\CGI
             return $this->showJSON(true);
         }
 
-        return $this->showJSON(T('Login failed! Please try again.'));
+        return $this->showJSON(T('获取系统应用信息失败，请重试'));
 
     }
 
     /**
         * @brief 获取登录表单
         *
-        * @return 
+        * @return
      */
     public function actionGetForm()
     {
@@ -112,7 +112,6 @@ class Gateway extends \Gini\Controller\CGI
 
         $confs = \Gini\Config::get('gapper.rpc');
         $clientId = $confs['client_id'];
-
         // login_url: http://hxpglgw.njust.edu.cn/login
         $redirectURL = \Gini\URI::url($config->login['url'], [
             'from'=> $clientId,
@@ -281,7 +280,7 @@ class Gateway extends \Gini\Controller\CGI
             $infos = (array)\Gini\Config::get('gapper.auth');
             $gInfo = (object)$infos['gateway'];
             $identitySource = @$gInfo->source;
-            
+
             $uid = \Gini\Gapper\Client::getRPC()->gapper->user->registerUserWithIdentity([
                 'username'=> $email,
                 'password'=> \Gini\Util::randPassword(),
