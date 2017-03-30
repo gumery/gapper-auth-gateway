@@ -20,7 +20,6 @@ class User401 extends \Gini\Controller\CGI
             return $this->_showError();
         }
 
-        $form = $this->form('post');
         $identity = $_SESSION['gapper-auth-gateway.username'];
         if (!$identity && !\Gini\Gapper\Client::getUserName()) {
             return $this->_showError();
@@ -47,35 +46,55 @@ class User401 extends \Gini\Controller\CGI
         }
         // TODO 参考Group401, 引导用户创建gapper用户
 
-        // $user = \Gini\Gapper\Client::getUserInfo();
-        // if (!$user['id']) {
-        //     return $this->_showError();
-        // }
-
+        $form = $this->form('post');
         if (isset($form['email'])) {
             $name = trim($form['name']);
             $email = trim($form['email']);
+            $nextVal = true;
 
             $validator = new \Gini\CGI\Validator();
             try {
                 if (!\Gini\Gapper\Client::getUserName()) {
                     $validator
                         ->validate('name', $name, T('请输入真实姓名'))
-                        ->validate('email', function() use ($email) {
+                        ->validate('email', function() use ($email, &$nextVal) {
                             $pattern = '/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/';
                             if (!preg_match($pattern, $email)) {
+                                $nextVal = false;
                                 return false;
                             }
                             return true;
                         }, T('请使用正确的Email'))
-                            ->validate('email', function() use ($email, $gapperRPC) {
-                                $identityUser = $gapperRPC->gapper->user->getInfo($email);
-                                if (!empty($identityUser)) return false;
-                                return true;
-                            }, T('Email已被占用, 请换一个'));
+                        ->validate('email', function() use (&$nextVal, $form, $gapperRPC) {
+                            if (!$nextVal) return true;
+                            $identityUser = $gapperRPC->gapper->user->getInfo($form['email']);
+                            if (!empty($identityUser) && ($form['password'] === '' || !array_key_exists('password', $form))) {
+                                $nextVal = false;
+                                return false;
+                            }
+                            return true;
+                        }, T('Email已被占用, 请换一个, 或输入Gapper账号密码绑定账号'))
+                        ->validate('password', function() use (&$nextVal, $form, $gapperRPC) {
+                            if (!$nextVal) return true;
+                            if (array_key_exists('password', $form) && $form['password'] !== '') {
+                                $result = $gapperRPC->gapper->user->verify($form['email'], $form['password']);
+                                if (!$result) return false;
+                            }
+                            return true;
+                        }, T('Email和密码不匹配'));
                 }
 
                 $validator->done();
+
+                $source = \Gini\Config::get('app.node');
+                $bool = $gapperRPC->Gapper->User->LinkIdentity($email, $source, $identity);
+                $user_id = $gapperRPC->Gapper->User->getInfo($email)['id'];
+                if ($bool) {
+                    if (!$gapperRPC->gapper->app->installTo($myClientID, 'user', $user_id)) {
+                        return \Gini\IoC::construct('\Gini\CGI\Response\JSON', T('您无权访问该应用，请联系系统管理员'));
+                    }
+                    \Gini\Gapper\Client::loginByUserName($email);
+                }
                 // 如果没有Gapper用户, 首先创建Gapper用户
                 if (!\Gini\Gapper\Client::getUserName()) {
                     $uid = $gapperRPC->gapper->user->registerUserWithIdentity([
@@ -95,6 +114,7 @@ class User401 extends \Gini\Controller\CGI
                         $validator->validate('*', false, T('用户注册失败，请重试!'))->done();
                     }
                 }
+
                 return \Gini\IoC::construct('\Gini\CGI\Response\JSON', true);
             }
             catch (\Exception $e) {
@@ -105,12 +125,18 @@ class User401 extends \Gini\Controller\CGI
             }
         }
 
+        $identityUser = $gapperRPC->gapper->user->getInfo($form['email']);
+        if (!empty($identityUser)) {
+            $hasGapper = true;
+        }
+
         $vars = [
             'icon' => $config->icon,
             'type' => $config->name,
             'email' => $userInfo->email,
             'name' => $userInfo->name,
             'form'=> $form,
+            'hasGapper' => $hasGapper,
             'error' => $error,
         ];
 
