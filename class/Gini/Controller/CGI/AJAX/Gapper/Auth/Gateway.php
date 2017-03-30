@@ -73,7 +73,7 @@ class Gateway extends \Gini\Controller\CGI
             $appInfo = \Gini\Gapper\Client::getInfo();
             if (strtolower($appInfo['type'])=='user') {
                 return \Gini\CGI::request('ajax/gapper/step/user401', $this->env)->execute();
-            } 
+            }
             return \Gini\CGI::request('ajax/gapper/step/group401', $this->env)->execute();
         }
 
