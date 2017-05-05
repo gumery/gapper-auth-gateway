@@ -65,7 +65,9 @@ class Group401 extends \Gini\Controller\CGI
         $userNameChangable = $config->user_name_changable;
 
         $gapperRPC = \Gini\Gapper\Client::getRPC();
-        $myStep = $_SESSION['gapper-auth-gateway.new-created-step']?:(empty($form)?:'active');
+        if (!isset($form['password'])) {
+            $myStep = $_SESSION['gapper-auth-gateway.new-created-step']?:'active';
+        }
         if ($myStep == 'active') {
             if ($userNameChangable) {
                 $name = trim($form['name']);
