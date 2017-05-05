@@ -81,7 +81,7 @@ class Gateway
         $cacheKey = "gateway/people/user.$key/info";
         $data = self::cache($cacheKey);
         if (empty($data)) {
-            $data = (array)self::getGatewayRPC()->Gateway->People->getUser($username);
+            $data = self::getGatewayRPC()->Gateway->People->getUser($username);
             self::cache($cacheKey, $data);
         }
         return $data;
