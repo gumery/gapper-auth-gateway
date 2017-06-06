@@ -21,8 +21,12 @@ class User401 extends \Gini\Controller\CGI
         }
 
         $identity = $_SESSION['gapper-auth-gateway.username'];
+        $gapperRPC = \Gini\Gapper\Client::getRPC();
         if (!$identity && !\Gini\Gapper\Client::getUserName()) {
             return $this->_showError();
+        }
+        elseif(!$identity) {
+            $identity = $gapperRPC->gapper->user->getIdentity(\Gini\Gapper\Client::getUserName(), \Gini\Config::get('app.node'));
         }
 
         $config = (object)\Gini\Config::get('gapper.auth')['gateway'];
@@ -32,7 +36,6 @@ class User401 extends \Gini\Controller\CGI
             return \Gini\IoC::construct('\Gini\CGI\Response\JSON', $config->tips['nobody']);
         }
 
-        $gapperRPC = \Gini\Gapper\Client::getRPC();
         $username = \Gini\Gapper\Client::getUserName();
         $user = \Gini\Gapper\Client::getUserInfo();
         if ($username) {
