@@ -9,6 +9,7 @@ auth:
     login:
       url: ${GATEWAY_LOGIN_URL}
       tip: ${GATEWAY_LOGIN_TIP}
+      relogin: ${GATEWAY_LOGIN_RELOGIN}
     user_name_changable: ${GATEWAY_USER_NAME_CHANGABLE}
     form_requires:
       school: ${GATEWAY_FORM_REQUIRES_SCHOOL}

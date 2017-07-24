@@ -113,9 +113,10 @@ class Gateway extends \Gini\Controller\CGI
         $confs = \Gini\Config::get('gapper.rpc');
         $clientId = $confs['client_id'];
         // login_url: http://hxpglgw.njust.edu.cn/login
+        $needRelogin = $config->login['relogin'];
         $redirectURL = \Gini\URI::url($config->login['url'], [
             'from'=> $clientId,
-            'relogin'=> 1,
+            'relogin'=> $needRelogin===false ? 1 : 0,
             'redirect'=> $redirectURL
         ]);
 
