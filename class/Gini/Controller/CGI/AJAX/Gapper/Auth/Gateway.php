@@ -116,7 +116,7 @@ class Gateway extends \Gini\Controller\CGI
         $needRelogin = $config->login['relogin'];
         $redirectURL = \Gini\URI::url($config->login['url'], [
             'from'=> $clientId,
-            'relogin'=> $needRelogin===false ? 1 : 0,
+            'relogin'=> $needRelogin===false ? 0 : 1,
             'redirect'=> $redirectURL
         ]);
 
