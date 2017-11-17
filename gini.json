@@ -2,7 +2,7 @@
     "id": "gapper-auth-gateway",
     "name": "Gateway API 登录",
     "description": "Gapper Login UI",
-    "version": "0.2.62",
+    "version": "0.2.63",
     "dependencies": {
         "gini": ">=0.6.0",
         "auth": "0.1.4"
@@ -11,5 +11,6 @@
         "require": {
             "overtrue/pinyin": "2.5.0"
         }
-    }
+    },
+    "moduleClass": "\\Gini\\Module\\gapperauthgateway"
 }
