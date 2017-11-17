@@ -5,7 +5,7 @@
     "version": "0.2.62",
     "dependencies": {
         "gini": ">=0.6.0",
-        "auth": ">=0.1.2"
+        "auth": "0.1.4"
     },
     "composer": {
         "require": {
